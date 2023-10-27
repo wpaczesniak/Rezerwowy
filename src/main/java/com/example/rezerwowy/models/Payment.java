@@ -32,8 +32,8 @@ public class Payment {
     @PastOrPresent(message = "Reservation should be made in the past")
     private LocalDate date;
 
+    @PrimaryKeyJoinColumn(name = "reservation_id")
     @OneToOne
-    @Column(name = "reservation_id")
     @NotNull
     private Reservation reservation;
 }

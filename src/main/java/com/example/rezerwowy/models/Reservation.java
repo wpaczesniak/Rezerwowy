@@ -2,6 +2,7 @@ package com.example.rezerwowy.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -16,5 +17,9 @@ import lombok.*;
 public class Reservation {
     @Id
     private Long id;
+
+    @OneToOne
+    private Payment payment;
+
     // TODO
 }
