@@ -7,6 +7,8 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Random;
+import java.util.UUID;
 
 @Entity
 @Table(name = "payment")
@@ -22,6 +24,10 @@ public class Payment {
     @Column(name = "payment_id")
     private Long id;
 
+    @Column(name = "payment_public_id", unique = true)
+    @NotNull
+    private UUID publicId;
+
     @Embedded
     @NotNull
     private Buyer buyer;
@@ -34,6 +40,5 @@ public class Payment {
 
     @PrimaryKeyJoinColumn(name = "reservation_id")
     @OneToOne
-    @NotNull
     private Reservation reservation;
 }
