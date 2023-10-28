@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static org.springframework.http.ResponseEntity.notFound;
-
 @RestController
 @RequestMapping("payments")
 @RequiredArgsConstructor
@@ -23,12 +21,12 @@ public class PaymentController {
     public ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {
         try {
             paymentService.addPayment(payment);
+            return ResponseEntity.ok(payment);
         }
         catch (Exception e) {
             return  ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(payment);
     }
 
     @PostMapping("/reservationId")
@@ -38,70 +36,61 @@ public class PaymentController {
                 Reservation foundReservation = Reservation.builder().build(); // TODO
                 payment.setReservation(foundReservation);
             }
-            paymentService.addPayment(payment);
+            Payment addedPayment = paymentService.addPayment(payment);
+            return ResponseEntity.ok(addedPayment);
         }
         catch (Exception e) {
             return  ResponseEntity.badRequest().build();
         }
-
-        return ResponseEntity.ok(payment);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getPaymentById(@PathVariable("id") Long paymentId) {
-        Payment payment = null;
         try {
-             payment = paymentService.getPaymentById(paymentId);
+            Payment payment = paymentService.getPaymentById(paymentId);
+            return ResponseEntity.status(HttpStatus.OK).body(payment);
         } catch (PaymentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(payment);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePaymentById(@PathVariable("id") Long paymentId) {
         try {
             paymentService.deletePaymentById(paymentId);
+            return ResponseEntity.ok().build();
         } catch (PaymentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/public/{id}")
     public ResponseEntity<Payment> getPaymentByPublicId(@PathVariable("id") UUID paymentPublicId) {
-        Payment payment;
         try {
-            payment = paymentService.getPaymentByPublicId(paymentPublicId);
+            Payment payment = paymentService.getPaymentByPublicId(paymentPublicId);
+            return ResponseEntity.status(HttpStatus.OK).body(payment);
         } catch (PaymentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(payment);
     }
 
     @DeleteMapping("/public/{id}")
     public ResponseEntity<Void> deletePaymentByPublicId(@PathVariable("id") UUID paymentPublicId) {
         try {
             paymentService.deletePaymentByPublicId(paymentPublicId);
+            return ResponseEntity.ok().build();
         } catch (PaymentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/receipt/{id}")
     public ResponseEntity<String> generatePaymentReceipt(@PathVariable("id") Long paymentId) {
-        String receipt;
         try {
-            receipt = paymentService.generatePaymentReceipt(paymentId);
+            String receipt = paymentService.generatePaymentReceipt(paymentId);
+            return ResponseEntity.status(HttpStatus.OK).body(receipt);
         } catch (PaymentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(receipt);
     }
 }

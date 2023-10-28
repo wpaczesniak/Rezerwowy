@@ -1,6 +1,7 @@
 package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
@@ -25,10 +26,12 @@ public class Payment {
 
     @Column(name = "payment_public_id", unique = true)
     @NotNull
+    @Builder.Default
     private UUID publicId = UUID.randomUUID();
 
     @Embedded
     @NotNull
+    @Valid
     private Buyer buyer;
 
     @Column(name = "date")

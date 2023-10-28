@@ -3,6 +3,7 @@ package com.example.rezerwowy.services;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.repositories.PaymentRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    public Payment addPayment(Payment payment) {
+    public Payment addPayment(@Valid Payment payment) {
         return paymentRepository.save(payment);
     }
 
