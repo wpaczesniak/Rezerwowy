@@ -4,10 +4,9 @@ import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -49,37 +48,37 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
-        int seatsNumber = 1; // TODO
-        BigDecimal pricePerSeat = BigDecimal.valueOf(10.00).setScale(2, RoundingMode.HALF_UP); // TODO
-        BigDecimal totalAmount = calculateTotalAmount(seatsNumber, pricePerSeat);
-        BigDecimal taxTotalAmount = calculateTax(totalAmount);
+        int seatsNumber = payment.getReservation().getSeats().size();
+//        int seatsNumber = 2;
+        Money pricePerSeat = payment.getReservation().getFootballMatch().getPricePerSeat();
+//        Money pricePerSeat = Money.of(10.00, "PLN");
+        Money totalAmount = calculateTotalAmount(seatsNumber, pricePerSeat);
+        Money taxTotalAmount = calculateTax(totalAmount);
         String seatsList = generateSeatsList(seatsNumber, pricePerSeat);
 
         return buildReceipt(payment, seatsList, taxTotalAmount, totalAmount);
     }
 
-    private BigDecimal calculateTotalAmount(int seatsNumber, BigDecimal pricePerSeat) {
-        return pricePerSeat.multiply(BigDecimal.valueOf(seatsNumber));
+    private Money calculateTotalAmount(int seatsNumber, Money pricePerSeat) {
+        return pricePerSeat.multiply(seatsNumber);
     }
 
-    private BigDecimal calculateTax(BigDecimal totalAmount) {
-        BigDecimal taxRate = BigDecimal.valueOf(TAX_IN_PERCENT)
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-        return totalAmount.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
+    private Money calculateTax(Money totalAmount) {
+        return totalAmount.multiply(TAX_IN_PERCENT).divide(100);
     }
 
     private String createLineBreak() {
         return String.join(" ", Collections.nCopies(RECEIPT_LINE_LENGTH / 2, "-"));
     }
 
-    private String generateSeatsList(int seatsNumber, BigDecimal pricePerSeat) {
+    private String generateSeatsList(int seatsNumber, Money pricePerSeat) {
         return String.join("\n", Collections.nCopies(
                 seatsNumber,
                 alignTextToRightAndLeftAtReceipt("MIEJSCE X1", pricePerSeat.toString())
         ));
     }
 
-    private String buildReceipt(Payment payment, String seatsList, BigDecimal taxTotalAmount, BigDecimal totalAmount) {
+    private String buildReceipt(Payment payment, String seatsList, Money taxTotalAmount, Money totalAmount) {
         String lineBreak = createLineBreak();
 
         return centerTextAtReceipt("REZERWOWY") + "\n" +

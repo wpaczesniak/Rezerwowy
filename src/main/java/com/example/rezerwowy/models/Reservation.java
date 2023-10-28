@@ -1,10 +1,10 @@
 package com.example.rezerwowy.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "reservation")
@@ -20,6 +20,12 @@ public class Reservation {
 
     @OneToOne
     private Payment payment;
+
+    @OneToMany
+    Set<Seat> seats = new HashSet<>();
+
+    @ManyToOne
+    FootballMatch footballMatch;
 
     // TODO
 }
