@@ -4,7 +4,6 @@ import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.services.PaymentService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,25 @@ import static org.springframework.http.ResponseEntity.notFound;
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping("/reservationId")
+    @PostMapping
     public ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {
         try {
-            Reservation foundReservation = Reservation.builder().build(); // TODO
-            payment.setReservation(foundReservation);
+            paymentService.addPayment(payment);
+        }
+        catch (Exception e) {
+            return  ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(payment);
+    }
+
+    @PostMapping("/reservationId")
+    public ResponseEntity<Payment> addPayment(@PathVariable("id") Long reservationId, @RequestBody Payment payment) {
+        try {
+            if (reservationId != null) {
+                Reservation foundReservation = Reservation.builder().build(); // TODO
+                payment.setReservation(foundReservation);
+            }
             paymentService.addPayment(payment);
         }
         catch (Exception e) {

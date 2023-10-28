@@ -7,13 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
-    private static final int TAX_IN_PERCENT = 32;
+    private static final int TAX_IN_PERCENT = 23;
     private static final int RECEIPT_LINE_LENGTH = 64;
 
     private final PaymentRepository paymentRepository;
@@ -49,7 +50,7 @@ public class PaymentService {
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
         int seatsNumber = 1; // TODO
-        BigDecimal pricePerSeat = BigDecimal.valueOf(10); // TODO
+        BigDecimal pricePerSeat = BigDecimal.valueOf(10.00).setScale(2, RoundingMode.HALF_UP); // TODO
         BigDecimal totalAmount = calculateTotalAmount(seatsNumber, pricePerSeat);
         BigDecimal taxTotalAmount = calculateTax(totalAmount);
         String seatsList = generateSeatsList(seatsNumber, pricePerSeat);
@@ -61,6 +62,12 @@ public class PaymentService {
         return pricePerSeat.multiply(BigDecimal.valueOf(seatsNumber));
     }
 
+    private BigDecimal calculateTax(BigDecimal totalAmount) {
+        BigDecimal taxRate = BigDecimal.valueOf(TAX_IN_PERCENT)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return totalAmount.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
+    }
+
     private String createLineBreak() {
         return String.join(" ", Collections.nCopies(RECEIPT_LINE_LENGTH / 2, "-"));
     }
@@ -68,7 +75,7 @@ public class PaymentService {
     private String generateSeatsList(int seatsNumber, BigDecimal pricePerSeat) {
         return String.join("\n", Collections.nCopies(
                 seatsNumber,
-                alignTextToRightAndLeftAtReceipt("MIEJSCE", pricePerSeat.toString())
+                alignTextToRightAndLeftAtReceipt("MIEJSCE X1", pricePerSeat.toString())
         ));
     }
 
@@ -79,19 +86,17 @@ public class PaymentService {
                 "\n" +
                 centerTextAtReceipt("PARAGON: " + payment.getPublicId()) + "\n" +
                 centerTextAtReceipt("DATA: " + payment.getDate()) + "\n" +
-                "KASJER: KASA ONLINE\n" +
-                lineBreak +
-                centerTextAtReceipt("PARAGON FISKALNY") +
-                lineBreak +
-                seatsList +
-                lineBreak +
-                alignTextToRightAndLeftAtReceipt("PODATEK " + TAX_IN_PERCENT + "%", taxTotalAmount.toString()) +
-                lineBreak +
+                centerTextAtReceipt("KASJER: KASA ONLINE") + "\n" +
+                lineBreak + "\n" +
+                centerTextAtReceipt("PARAGON FISKALNY") + "\n" +
+                lineBreak + "\n" +
+                seatsList + "\n" +
+                lineBreak + "\n" +
+                alignTextToRightAndLeftAtReceipt(
+                        "PODATEK " + TAX_IN_PERCENT + "%", taxTotalAmount.toString()
+                ) + "\n" +
+                lineBreak + "\n" +
                 alignTextToRightAndLeftAtReceipt("SUMA: ", totalAmount.toString());
-    }
-
-    private BigDecimal calculateTax(BigDecimal totalAmount) {
-        return totalAmount.multiply(BigDecimal.valueOf(TAX_IN_PERCENT));
     }
 
     private String centerTextAtReceipt(String text) {
