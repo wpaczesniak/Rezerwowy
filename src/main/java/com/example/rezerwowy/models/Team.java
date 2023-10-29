@@ -7,6 +7,7 @@ import lombok.*;
 
 @Entity
 @Data
+@Table(name = "team")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
