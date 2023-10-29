@@ -7,7 +7,6 @@ import org.javamoney.moneta.Money;
 
 @Entity
 @Getter
-
 public class FootballMatch {
     @Id
     private Long id;

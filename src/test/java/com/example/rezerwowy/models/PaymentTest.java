@@ -1,5 +1,6 @@
 package com.example.rezerwowy.models;
 
+import com.example.rezerwowy.factories.PaymentFactory;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -24,7 +25,7 @@ class PaymentTest {
     @Test
     public void should_notValidate_when_dateIsNull() {
         // given
-        Payment payment = createProperPaymentCase1();
+        Payment payment = PaymentFactory.createProperPaymentCase1();
 
         // when
         payment.setDate(null);
@@ -38,7 +39,7 @@ class PaymentTest {
     @Test
     public void should_validate_when_dateIsInThePast() {
         // given
-        Payment payment = createProperPaymentCase1();
+        Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.now().minusYears(1);
 
         // when
@@ -53,7 +54,7 @@ class PaymentTest {
     @Test
     public void should_validate_when_dateIsInToday() {
         // given
-        Payment payment = createProperPaymentCase3();
+        Payment payment = PaymentFactory.createProperPaymentCase3();
         LocalDate date = LocalDate.now();
 
         // when
@@ -68,7 +69,7 @@ class PaymentTest {
     @Test
     public void should_notValidate_when_dateIsInTheFuture() {
         // given
-        Payment payment = createProperPaymentCase1();
+        Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.now().plusYears(1).plusDays(4);
 
         // when
@@ -83,7 +84,7 @@ class PaymentTest {
     @Test
     public void should_notValidate_when_buyerIsNull() {
         // given
-        Payment payment = createProperPaymentCase1();
+        Payment payment = PaymentFactory.createProperPaymentCase1();
 
         // when
         payment.setBuyer(null);
@@ -97,33 +98,11 @@ class PaymentTest {
     @Test
     public void should_validate_when_paymentIsProper() {
         // given
-        Payment payment = createProperPaymentCase2();
+        Payment payment = PaymentFactory.createProperPaymentCase2();
 
         // when then
         Set<ConstraintViolation<Payment>> constraintViolations =
                 validator.validate(payment);
         assertThat(constraintViolations).isEmpty();
     }
-
-    static Payment createProperPaymentCase1() {
-        return Payment.builder()
-                .buyer(BuyerTest.createProperBuyerCase1())
-                .date(LocalDate.of(2020, 4, 15))
-                .build();
-    }
-
-    static Payment createProperPaymentCase2() {
-        return Payment.builder()
-                .buyer(BuyerTest.createProperBuyerCase2())
-                .date(LocalDate.of(2022, 11, 5))
-                .build();
-    }
-
-    static Payment createProperPaymentCase3() {
-        return Payment.builder()
-                .buyer(BuyerTest.createProperBuyerCase3())
-                .date(LocalDate.of(2023, 8, 6))
-                .build();
-    }
-
 }

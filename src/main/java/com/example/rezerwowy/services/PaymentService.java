@@ -14,8 +14,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
-    private static final int TAX_IN_PERCENT = 23;
-    private static final int RECEIPT_LINE_LENGTH = 64;
+    public static final double TAX_IN_PERCENT = 23;
+    public static final int RECEIPT_LINE_LENGTH = 64;
 
     private final PaymentRepository paymentRepository;
 
@@ -28,15 +28,15 @@ public class PaymentService {
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
     }
 
+    public Payment getPaymentByPublicId(UUID paymentPublicId) {
+        return paymentRepository.findByPublicId(paymentPublicId)
+                .orElseThrow(() -> new PaymentNotFoundException(paymentPublicId));
+    }
+
     public void deletePaymentById(Long paymentId) {
         if (!paymentRepository.existsById(paymentId))
             throw new PaymentNotFoundException(paymentId);
         paymentRepository.deleteById(paymentId);
-    }
-
-    public Payment getPaymentByPublicId(UUID paymentPublicId) {
-        return paymentRepository.findByPublicId(paymentPublicId)
-                .orElseThrow(() -> new PaymentNotFoundException(paymentPublicId));
     }
 
     public void deletePaymentByPublicId(UUID paymentPublicId) {
@@ -49,19 +49,27 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
-        int seatsNumber = payment.getReservation().getSeats().size();
-//        int seatsNumber = 2;
-        Money pricePerSeat = payment.getReservation().getFootballMatch().getPricePerSeat();
+        int seatsCount = getSeatsCount(payment);
+//        int seatsCount = 2;
+        Money pricePerSeat = getPricePerSeat(payment);
 //        Money pricePerSeat = Money.of(10.00, "PLN");
-        Money totalAmount = calculateTotalAmount(seatsNumber, pricePerSeat);
+        Money totalAmount = calculateTotalAmount(seatsCount, pricePerSeat);
         Money taxTotalAmount = calculateTax(totalAmount);
-        String seatsList = generateSeatsList(seatsNumber, pricePerSeat);
+        String seatsList = generateSeatsList(seatsCount, pricePerSeat);
 
         return buildReceipt(payment, seatsList, taxTotalAmount, totalAmount);
     }
 
-    private Money calculateTotalAmount(int seatsNumber, Money pricePerSeat) {
-        return pricePerSeat.multiply(seatsNumber);
+    private int getSeatsCount(Payment payment) {
+        return payment.getReservation().getSeats().size();
+    }
+
+    private Money getPricePerSeat(Payment payment) {
+        return payment.getReservation().getFootballMatch().getPricePerSeat();
+    }
+
+    private Money calculateTotalAmount(int seatsCount, Money pricePerSeat) {
+        return pricePerSeat.multiply(seatsCount);
     }
 
     private Money calculateTax(Money totalAmount) {
@@ -69,12 +77,12 @@ public class PaymentService {
     }
 
     private String createLineBreak() {
-        return String.join(" ", Collections.nCopies(RECEIPT_LINE_LENGTH / 2, "-"));
+        return String.join(" ", Collections.nCopies(RECEIPT_LINE_LENGTH / 2, "-")) + " ";
     }
 
-    private String generateSeatsList(int seatsNumber, Money pricePerSeat) {
+    private String generateSeatsList(int seatsCount, Money pricePerSeat) {
         return String.join("\n", Collections.nCopies(
-                seatsNumber,
+                seatsCount,
                 alignTextToRightAndLeftAtReceipt("MIEJSCE X1", pricePerSeat.toString())
         ));
     }

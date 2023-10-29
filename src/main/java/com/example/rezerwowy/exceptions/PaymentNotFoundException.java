@@ -8,6 +8,6 @@ public class PaymentNotFoundException extends RuntimeException {
     }
 
     public PaymentNotFoundException(UUID publicId) {
-        super(String.format("Payment with id: %s not found", publicId));
+        super(String.format("Payment with public id: %s not found", publicId));
     }
 }
