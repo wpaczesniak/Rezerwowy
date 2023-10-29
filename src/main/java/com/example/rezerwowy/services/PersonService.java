@@ -2,13 +2,10 @@ package com.example.rezerwowy.services;
 
 import com.example.rezerwowy.exceptions.PersonNotFoundException;
 import com.example.rezerwowy.models.Person;
-import com.example.rezerwowy.models.Role;
 import com.example.rezerwowy.repositories.PersonRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
