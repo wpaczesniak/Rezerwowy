@@ -8,6 +8,7 @@ import lombok.*;
 @Entity
 @Data
 @Table(name = "team")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
@@ -17,6 +18,9 @@ public class Team {
 
     private static final String NAME_LENGTH_VALIDATION_MESSAGE =
             "Name length must be between " + MIN_NAME_LENGTH + " and " + MAX_NAME_LENGTH + " characters";
+
+    private static final String ABBREVIATION_LENGTH_VALIDATION_MESSAGE =
+            "Abbreviation length must be less than " + MAX_ABBREVIATION_LENGTH + " characters";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +35,6 @@ public class Team {
 
     @Column(name = "team_abbreviation", length = MAX_ABBREVIATION_LENGTH, nullable = false)
     @NotEmpty
+    @Size(max = MAX_ABBREVIATION_LENGTH, message = ABBREVIATION_LENGTH_VALIDATION_MESSAGE)
     private String abbreviation;
 }
