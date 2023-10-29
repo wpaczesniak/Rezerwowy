@@ -10,5 +10,5 @@ public class Team {
     private Long id;
 
     @OneToMany
-    List<Person> players;
+    private List<Person> players;
 }

@@ -1,6 +1,7 @@
 package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.LinkedList;
@@ -15,15 +16,26 @@ import java.util.List;
 @Builder
 @ToString
 public class Person {
+    private static final int MIN_FIELD_LENGTH = 2;
+    private static final int MAX_NAME_LENGTH = 50;
+    private static final int MAX_SURNAME_LENGTH = 50;
+
+    private static final String NAME_LENGTH_VALIDATION_MESSAGE =
+            "Name length should be between " + MIN_FIELD_LENGTH  + " and " + MAX_NAME_LENGTH + " characters";
+    private static final String SURNAME_LENGTH_VALIDATION_MESSAGE =
+            "Surname length should be between " + MIN_FIELD_LENGTH  + " and " + MAX_SURNAME_LENGTH + " characters";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="personID")
     private Long id;
 
-    @Column(name="name")
+    @Column(name="name", length = MAX_NAME_LENGTH)
+    @NotNull
     private String name;
 
-    @Column(name="surename")
+    @Column(name="surename", length = MAX_SURNAME_LENGTH)
+    @NotNull
     private String surename;
 
     @PrimaryKeyJoinColumn(name="teamID")
