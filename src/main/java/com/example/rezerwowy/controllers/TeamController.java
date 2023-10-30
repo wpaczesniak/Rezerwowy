@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
@@ -32,10 +34,14 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> addTeam(@RequestBody Team team, UriComponentsBuilder ucb) {
         try {
-            teamService.addTeam(team);
-            return ResponseEntity.ok(team);
+            Team addedTeam = teamService.addTeam(team);
+            URI newTeamLocation = ucb
+                    .path("/teams/{id}")
+                    .buildAndExpand(addedTeam.getId())
+                    .toUri();
+            return ResponseEntity.created(newTeamLocation).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
