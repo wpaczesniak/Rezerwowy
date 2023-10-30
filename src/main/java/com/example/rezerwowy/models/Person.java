@@ -1,7 +1,9 @@
 package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.LinkedList;
@@ -31,11 +33,13 @@ public class Person {
     private Long id;
 
     @Column(name="name", length = MAX_NAME_LENGTH)
-    @NotNull
+    @NotEmpty
+    @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
 
     @Column(name="surname", length = MAX_SURNAME_LENGTH)
-    @NotNull
+    @NotEmpty
+    @Size(min = MIN_FIELD_LENGTH, max = MAX_SURNAME_LENGTH, message = SURNAME_LENGTH_VALIDATION_MESSAGE)
     private String surname;
 
     @PrimaryKeyJoinColumn(name="teamID")
