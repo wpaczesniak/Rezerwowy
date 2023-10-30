@@ -22,6 +22,21 @@ public class PersonTest {
     }
 
     @Test
+    public void should_Validate_when_nameSizeIsGood() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name = "Karol";
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isEmpty();
+    }
+
+    @Test
     public void should_notValidate_when_nameIsNull() {
         // given
         Person person = PersonFactory.createProperBuyerCase1();
@@ -64,6 +79,96 @@ public class PersonTest {
     }
 
     @Test
+    public void should_notValidate_when_nameIsTooLong() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name = person.getName().repeat(100);
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_nameIsTooShort() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name ="X";
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_nameIsNotLetters() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name ="&!?";
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_nameIsNumeric() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name ="54288";
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_nameIsNickWithNotLetter() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String name ="Kardo93442";
+
+        // when
+        person.setName(name);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_Validate_when_surnameSizeIsGood() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String surname = "Do";
+
+        // when
+        person.setSurname(surname);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isEmpty();
+    }
+
+    @Test
     public void should_notValidate_when_surnameIsNull() {
         // given
         Person person = PersonFactory.createProperBuyerCase3();
@@ -94,7 +199,7 @@ public class PersonTest {
     @Test
     public void should_Validate_when_manySurnames() {
         // given
-        Person person = PersonFactory.createProperBuyerCase2();
+        Person person = PersonFactory.createProperBuyerCase4();
 
         // when
         person.setSurname("De Bruyne");
@@ -103,5 +208,35 @@ public class PersonTest {
         Set<ConstraintViolation<Person>> constraintViolations =
                 validator.validate(person);
         assertThat(constraintViolations).isEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_surnameIsTooLong() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String surname = person.getSurname().repeat(100);
+
+        // when
+        person.setSurname(surname);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
+    public void should_notValidate_when_surnameIsTooShort() {
+        // given
+        Person person = PersonFactory.createProperBuyerCase1();
+        String surname = "X";
+
+        // when
+        person.setSurname(surname);
+
+        // then
+        Set<ConstraintViolation<Person>> constraintViolations =
+                validator.validate(person);
+        assertThat(constraintViolations).isNotEmpty();
     }
 }

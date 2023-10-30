@@ -2,7 +2,7 @@ package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -27,6 +27,10 @@ public class Person {
     private static final String SURNAME_LENGTH_VALIDATION_MESSAGE =
             "Surname length should be between " + MIN_FIELD_LENGTH  + " and " + MAX_SURNAME_LENGTH + " characters";
 
+    private static final String REGEX_FOR_NAMES =
+            "([a-zA-Z\\-\\.\\']+\\s?)+";
+    private static final String NAMES_CHARS_VALIDATION_MESSAGE = "That is not a proper name";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="personID")
@@ -35,11 +39,13 @@ public class Person {
     @Column(name="name", length = MAX_NAME_LENGTH)
     @NotEmpty
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
+    @Pattern(regexp = REGEX_FOR_NAMES, message = NAMES_CHARS_VALIDATION_MESSAGE)
     private String name;
 
     @Column(name="surname", length = MAX_SURNAME_LENGTH)
     @NotEmpty
     @Size(min = MIN_FIELD_LENGTH, max = MAX_SURNAME_LENGTH, message = SURNAME_LENGTH_VALIDATION_MESSAGE)
+    @Pattern(regexp = REGEX_FOR_NAMES, message = NAMES_CHARS_VALIDATION_MESSAGE)
     private String surname;
 
     @PrimaryKeyJoinColumn(name="teamID")
