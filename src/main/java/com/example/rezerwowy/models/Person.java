@@ -34,9 +34,9 @@ public class Person {
     @NotNull
     private String name;
 
-    @Column(name="surename", length = MAX_SURNAME_LENGTH)
+    @Column(name="surname", length = MAX_SURNAME_LENGTH)
     @NotNull
-    private String surename;
+    private String surname;
 
     @PrimaryKeyJoinColumn(name="teamID")
     @ManyToOne
