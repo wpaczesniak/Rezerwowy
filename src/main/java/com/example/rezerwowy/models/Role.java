@@ -6,9 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Data
 @Table(name = "role")
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
