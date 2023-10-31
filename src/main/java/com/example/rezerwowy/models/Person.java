@@ -33,7 +33,7 @@ public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="personID")
+    @Column(name="person_id")
     private Long id;
 
     @Column(name="name", length = MAX_NAME_LENGTH)
@@ -48,11 +48,11 @@ public class Person {
     @Pattern(regexp = REGEX_FOR_NAMES, message = NAMES_CHARS_VALIDATION_MESSAGE)
     private String surname;
 
-    @PrimaryKeyJoinColumn(name="teamID")
+    @PrimaryKeyJoinColumn(name="team_id")
     @ManyToOne
     private Team team;
 
-    @PrimaryKeyJoinColumn(name="roleID")
+    @PrimaryKeyJoinColumn(name="role_id")
     @OneToMany
     private List<Role> roles = new LinkedList<>();
 }

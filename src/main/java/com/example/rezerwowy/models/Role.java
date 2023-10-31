@@ -1,15 +1,18 @@
 package com.example.rezerwowy.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name="role")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@ToString
 public class Role {
     @Id
-    @Column(name="roleID")
     private Long id;
 
     @ManyToOne
