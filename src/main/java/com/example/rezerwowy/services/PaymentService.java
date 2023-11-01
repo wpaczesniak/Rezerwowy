@@ -1,5 +1,6 @@
 package com.example.rezerwowy.services;
 
+import com.example.rezerwowy.exceptions.PaymentAlreadyExistsException;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.repositories.PaymentRepository;
@@ -20,7 +21,9 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Transactional
-    public Payment addPayment(Payment payment) {
+    public Payment createPayment(@Valid Payment payment) {
+        if (payment.getId() != null && paymentRepository.existsById(payment.getId()))
+            throw new PaymentAlreadyExistsException(payment.getId());
         return paymentRepository.save(payment);
     }
 

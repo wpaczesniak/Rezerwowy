@@ -1,5 +1,7 @@
 package com.example.rezerwowy.services;
 
+import com.example.rezerwowy.exceptions.PaymentAlreadyExistsException;
+import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.factories.PaymentFactory;
 import com.example.rezerwowy.models.FootballMatch;
 import com.example.rezerwowy.models.Payment;
@@ -7,6 +9,7 @@ import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Seat;
 import com.example.rezerwowy.repositories.PaymentRepository;
 import org.javamoney.moneta.Money;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,16 +41,44 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_callAppropriateMethodInRepository_when_addPayment() {
+    public void should_callAppropriateMethodInRepository_when_createPayment() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         Mockito.when(paymentRepository.save(payment)).thenReturn(payment);
 
         // when
-        paymentService.addPayment(payment);
+        paymentService.createPayment(payment);
 
         // then
         Mockito.verify(paymentRepository).save(payment);
+    }
+
+    @Test
+    public void should_returnObjectWithTheSameDate_when_createPayment() {
+        //given
+        Payment payment = PaymentFactory.createProperPaymentCase1();
+        Mockito.when(paymentRepository.save(payment)).thenReturn(payment);
+
+        // when
+        Payment savedPayment = paymentService.createPayment(payment);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(savedPayment.getDate()).isEqualTo(payment.getDate()),
+                () -> assertThat(savedPayment.getBuyer()).isEqualTo(payment.getBuyer()),
+                () -> assertThat(savedPayment.getReservation()).isEqualTo(payment.getReservation())
+        );
+    }
+
+    @Test
+    public void should_throwException_when_paymentWithTheSameIdAlreadyExists() {
+        //given
+        Payment payment = PaymentFactory.createProperPaymentCase1();
+        Mockito.when(paymentRepository.existsById(payment.getId())).thenReturn(true);
+
+        // when then
+        assertThatThrownBy(() -> paymentService.createPayment(payment))
+                .isInstanceOf(PaymentAlreadyExistsException.class);
     }
 
     @Test
@@ -61,6 +93,36 @@ class PaymentServiceTest {
 
         // then
         Mockito.verify(paymentRepository).findById(id);
+    }
+
+    @Test
+    public void should_returnObjectWithCorrectData_when_getPaymentByIdAndItExists() {
+        //given
+        Payment payment = PaymentFactory.createProperPaymentCase2();
+        Long id = payment.getId();
+        Mockito.when(paymentRepository.findById(id)).thenReturn(Optional.of(payment));
+
+        // when
+        Payment foundPayment = paymentService.getPaymentById(id);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(foundPayment.getDate()).isEqualTo(payment.getDate()),
+                () -> assertThat(foundPayment.getBuyer()).isEqualTo(payment.getBuyer()),
+                () -> assertThat(foundPayment.getReservation()).isEqualTo(payment.getReservation())
+        );
+    }
+
+    @Test
+    public void should_throwException_when_getPaymentByIdButItDoesntExist() {
+        //given
+        Payment payment = PaymentFactory.createProperPaymentCase2();
+        Long id = payment.getId();
+        Mockito.when(paymentRepository.findById(id)).thenReturn(Optional.empty());
+
+        // when then
+        assertThatThrownBy(() -> paymentService.getPaymentById(id))
+                .isInstanceOf(PaymentNotFoundException.class);
     }
 
     @Test

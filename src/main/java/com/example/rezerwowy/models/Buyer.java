@@ -10,8 +10,7 @@ import lombok.*;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
 @ToString
 public class Buyer {
