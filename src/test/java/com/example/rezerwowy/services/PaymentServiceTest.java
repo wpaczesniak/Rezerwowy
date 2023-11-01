@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,20 +64,6 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_callAppropriateMethodInRepository_when_getPaymentByPublicId() {
-        //given
-        Payment payment = PaymentFactory.createProperPaymentCase3();
-        UUID publicId = payment.getPublicId();
-        Mockito.when(paymentRepository.findByPublicId(publicId)).thenReturn(Optional.of(payment));
-
-        // when
-        paymentService.getPaymentByPublicId(publicId);
-
-        // then
-        Mockito.verify(paymentRepository).findByPublicId(publicId);
-    }
-
-    @Test
     public void should_callAppropriateMethodInRepository_when_deletePaymentById() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
@@ -90,20 +75,6 @@ class PaymentServiceTest {
 
         // then
         Mockito.verify(paymentRepository).deleteById(id);
-    }
-
-    @Test
-    public void should_callAppropriateMethodInRepository_when_deletePaymentByPublicId() {
-        //given
-        Payment payment = PaymentFactory.createProperPaymentCase2();
-        UUID publicId = payment.getPublicId();
-        Mockito.when(paymentRepository.existsByPublicId(publicId)).thenReturn(true);
-
-        // when
-        paymentService.deletePaymentByPublicId(publicId);
-
-        // then
-        Mockito.verify(paymentRepository).deleteByPublicId(publicId);
     }
 
     @Test

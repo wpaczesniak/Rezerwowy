@@ -28,17 +28,17 @@ public class Buyer {
     private static final String EMAIL_LENGTH_VALIDATION_MESSAGE =
             "Email length should be between " + MIN_FIELD_LENGTH  + " and " + MAX_EMAIL_LENGTH + " characters";
 
-    @Column(name = "buyer_name", length = MAX_NAME_LENGTH)
+    @Column(name = "buyer_name", nullable = false, length = MAX_NAME_LENGTH)
     @NotEmpty
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
 
-    @Column(name = "buyer_surname", length = MAX_SURNAME_LENGTH)
+    @Column(name = "buyer_surname", nullable = false, length = MAX_SURNAME_LENGTH)
     @NotEmpty
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = SURNAME_LENGTH_VALIDATION_MESSAGE)
     private String surname;
 
-    @Column(name = "buyer_email", length = MAX_EMAIL_LENGTH)
+    @Column(name = "buyer_email", nullable = false, length = MAX_EMAIL_LENGTH)
     @NotEmpty
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = EMAIL_LENGTH_VALIDATION_MESSAGE)
     @Email

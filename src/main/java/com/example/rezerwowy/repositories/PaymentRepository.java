@@ -7,7 +7,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
-    public Optional<Payment> findByPublicId(UUID publicId);
-    public boolean existsByPublicId(UUID publicUuid);
-    public void deleteByPublicId(UUID publicUuid);
 }
