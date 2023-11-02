@@ -8,8 +8,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person,Long> {
-    public Optional<Person> findByPublicId(UUID publicId);
-    public boolean existsByPublicId(UUID publicUuid);
-    public void deleteByPublicId(UUID publicUuid);
-}
+public interface PersonRepository extends JpaRepository<Person,Long> { }
