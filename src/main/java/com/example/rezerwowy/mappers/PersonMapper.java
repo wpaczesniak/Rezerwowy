@@ -1,10 +1,7 @@
 package com.example.rezerwowy.mappers;
 
-import com.example.rezerwowy.dtos.PaymentDto;
 import com.example.rezerwowy.dtos.PersonDTO;
-import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Person;
-import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;

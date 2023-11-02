@@ -28,7 +28,7 @@ public class PersonServiceTest {
     @Test
     public void should_callAppropriateMethodInRepository_when_addPerson() {
         //given
-        Person person = PersonFactory.createProperBuyerCase1();
+        Person person = PersonFactory.createPersonCase1();
         Mockito.when(personRepository.save(person)).thenReturn(person);
 
         // when
@@ -41,7 +41,7 @@ public class PersonServiceTest {
     @Test
     public void should_callAppropriateMethodInRepository_when_getPersonById() {
         //given
-        Person person = PersonFactory.createProperBuyerCase2();
+        Person person = PersonFactory.createPersonCase2();
         Long id = person.getId();
         Mockito.when(personRepository.findById(id)).thenReturn(Optional.of(person));
 
@@ -55,7 +55,7 @@ public class PersonServiceTest {
     @Test
     public void should_callAppropriateMethodInRepository_when_deletePersonById() {
         //given
-        Person person = PersonFactory.createProperBuyerCase3();
+        Person person = PersonFactory.createPersonCase3();
         Long id = person.getId();
         Mockito.when(personRepository.existsById(id)).thenReturn(true);
 
