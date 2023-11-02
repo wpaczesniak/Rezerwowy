@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PaymentMapper {
+
+	@Lazy
+	private final PaymentService paymentService;
     @Lazy private final ReservationMapper reservationMapper;
     public PaymentDto mapPaymentToPaymentDto(Payment payment) {
         Long reservationId = payment.getReservation() != null
@@ -38,4 +41,8 @@ public class PaymentMapper {
                 .reservation(reservation)
                 .build();
     }
+
+	public Payment mapPaymentIdToPayment(Long paymentId) {
+		return paymentService.getPaymentById(paymentId);
+	}
 }
