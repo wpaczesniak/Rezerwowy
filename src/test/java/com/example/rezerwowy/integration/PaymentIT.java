@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -186,5 +187,19 @@ public class PaymentIT {
         // when then
         assertThatThrownBy(() -> paymentService.deletePaymentById(payment.getId()))
                 .isInstanceOf(PaymentNotFoundException.class);
+    }
+
+    @Test
+    @DirtiesContext
+    void should_returnNotFoundCode_when_deleteNonExistingPayment() {
+        // given
+        Payment payment = PaymentFactory.createProperPaymentCase3();
+        paymentRepository.deleteById(payment.getId());
+
+        // when
+        ResponseEntity<Void> deleteResponse = restTemplate.exchange("/payments/" + payment.getId(), HttpMethod.DELETE, null, Void.class);
+
+        // when
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }
