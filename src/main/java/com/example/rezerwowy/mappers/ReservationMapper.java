@@ -10,15 +10,12 @@ import com.example.rezerwowy.services.PaymentService;
 import com.example.rezerwowy.services.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ReservationMapper {
 	@Lazy
