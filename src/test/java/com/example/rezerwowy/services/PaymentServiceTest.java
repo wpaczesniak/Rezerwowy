@@ -41,7 +41,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_callAppropriateMethodInRepository_when_createPayment() {
+    void should_callAppropriateMethodInRepository_when_createPayment() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         Mockito.when(paymentRepository.save(payment)).thenReturn(payment);
@@ -54,7 +54,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_returnObjectWithTheSameDate_when_createPayment() {
+    void should_returnObjectWithTheSameDate_when_createPayment() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         Mockito.when(paymentRepository.save(payment)).thenReturn(payment);
@@ -71,7 +71,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_throwException_when_paymentWithTheSameIdAlreadyExists() {
+    void should_throwException_when_paymentWithTheSameIdAlreadyExists() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         Mockito.when(paymentRepository.existsById(payment.getId())).thenReturn(true);
@@ -82,7 +82,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_callAppropriateMethodInRepository_when_getPaymentById() {
+    void should_callAppropriateMethodInRepository_when_getPaymentById() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase2();
         Long id = payment.getId();
@@ -96,7 +96,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_returnObjectWithCorrectData_when_getPaymentByIdAndItExists() {
+    void should_returnObjectWithCorrectData_when_getPaymentByIdAndItExists() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase2();
         Long id = payment.getId();
@@ -114,7 +114,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_throwException_when_getPaymentByIdButItDoesntExist() {
+    void should_throwException_when_getPaymentByIdButItDoesntExist() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase2();
         Long id = payment.getId();
@@ -126,7 +126,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_callAppropriateMethodInRepository_when_deletePaymentById() {
+    void should_callAppropriateMethodInRepository_when_deletePaymentById() {
         //given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         Long id = payment.getId();
@@ -140,7 +140,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_containCorrectCurrency_when_generatePaymentReceipt() {
+    void should_containCorrectCurrency_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 1;
@@ -156,7 +156,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_containCorrectSum_when_generatePaymentReceipt() {
+    void should_containCorrectSum_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 1;
@@ -172,7 +172,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_containPricePerSeat3Times_when_generatePaymentReceiptForReservationFor3Seats() {
+    void should_containPricePerSeatAsManyTimesAsSeats_when_generatePaymentReceiptForReservationFor3Seats() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 3;
@@ -188,7 +188,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_containCorrectTaxAmount_when_generatePaymentReceipt() {
+    void should_containCorrectTaxAmount_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 2;
@@ -205,7 +205,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_containCorrectDate_when_generatePaymentReceipt() {
+    void should_containCorrectDate_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.of(2015, 7, 3);
@@ -221,7 +221,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    public void should_haveEveryLineOfSameWidth_when_generatePaymentReceipt() {
+    void should_haveEveryLineOfSameWidth_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.of(2015, 7, 3);
