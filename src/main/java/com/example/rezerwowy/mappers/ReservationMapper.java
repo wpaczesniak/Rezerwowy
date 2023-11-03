@@ -2,12 +2,15 @@ package com.example.rezerwowy.mappers;
 
 import com.example.rezerwowy.dtos.ReservationDto;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
+import com.example.rezerwowy.exceptions.ReservationNotFoundException;
 import com.example.rezerwowy.models.FootballMatch;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Seat;
+import com.example.rezerwowy.services.FootballMatchService;
 import com.example.rezerwowy.services.PaymentService;
 import com.example.rezerwowy.services.ReservationService;
+import com.example.rezerwowy.services.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -25,9 +28,9 @@ public class ReservationMapper {
 	private final ReservationService reservationService;
 
 	@Lazy
-	private final FootballMatchMapper footballMatchMapper;
+	private final FootballMatchService footballMatchService;
 	@Lazy
-	private final SeatMapper seatMapper;
+	private final SeatService seatService;
 	@Lazy
 	private final PaymentService paymentService;
 
@@ -44,17 +47,28 @@ public class ReservationMapper {
 		return ReservationDto.builder()
 				.id(reservation.getId())
 				.publicId(reservation.getPublicId())
-				.seatsId(seatsId)
+				.comment(reservation.getComment())
+				.seatIds(seatsId)
 				.footballMatchId(matchId)
 				.paymentId(paymentId)
 				.build();
 	}
 
 	public Reservation mapReservationDtoToReservation(ReservationDto reservationDto) {
-		FootballMatch footballMatch = footballMatchMapper
-				.mapFootballMatchtIdToFootballMatch(reservationDto.footballMatchId());
-		Set<Seat> seats = seatMapper
-				.mapSeatsIdToSeats(reservationDto.seatsId());
+		FootballMatch footballMatch = null;
+		if (reservationDto.footballMatchId() != null) {
+			try {
+				footballMatch = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
+			} catch (ReservationNotFoundException ignored) { }
+		}
+
+		Set<Seat> seats = null;
+		if (reservationDto.seatIds() != null) {
+			try {
+				seats = seatService.getSeatsByIds(reservationDto.seatIds());
+			} catch (ReservationNotFoundException ignored) { }
+		}
+
 		Payment payment = null;
 		if (reservationDto.paymentId() != null) {
 			try {
@@ -64,6 +78,7 @@ public class ReservationMapper {
 
 		return Reservation.builder()
 				.id(reservationDto.id())
+				.comment(reservationDto.comment())
 				.footballMatch(footballMatch)
 				.seats(seats)
 				.payment(payment)

@@ -12,7 +12,5 @@ public class FootballMatchMapper {
 	@Lazy
 	private final FootballMatchService footballMatchService;
 
-	public FootballMatch mapFootballMatchtIdToFootballMatch(Long footballMatchId) {
-		return footballMatchService.getFootballMatchById(footballMatchId);
-	}
+
 }
