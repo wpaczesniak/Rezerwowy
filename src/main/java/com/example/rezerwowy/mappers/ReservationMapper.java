@@ -1,10 +1,12 @@
 package com.example.rezerwowy.mappers;
 
 import com.example.rezerwowy.dtos.ReservationDto;
+import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.FootballMatch;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Seat;
+import com.example.rezerwowy.services.PaymentService;
 import com.example.rezerwowy.services.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -27,7 +29,7 @@ public class ReservationMapper {
 	@Lazy
 	private final SeatMapper seatMapper;
 	@Lazy
-	private final PaymentMapper paymentMapper;
+	private final PaymentService paymentService;
 
 	public ReservationDto mapReservationToReservationDto(Reservation reservation) {
 		Long matchId = reservation.getFootballMatch() != null
@@ -53,17 +55,18 @@ public class ReservationMapper {
 				.mapFootballMatchtIdToFootballMatch(reservationDto.footballMatchId());
 		Set<Seat> seats = seatMapper
 				.mapSeatsIdToSeats(reservationDto.seatsId());
-		Payment payment = paymentMapper
-				.mapPaymentIdToPayment(reservationDto.paymentId());
+		Payment payment = null;
+		if (reservationDto.paymentId() != null) {
+			try {
+				payment = paymentService.getPaymentById(reservationDto.paymentId());
+			} catch (PaymentNotFoundException ignored) { }
+		}
+
 		return Reservation.builder()
 				.id(reservationDto.id())
 				.footballMatch(footballMatch)
 				.seats(seats)
 				.payment(payment)
 				.build();
-	}
-
-	public Reservation mapReservationIdToReservation(Long reservationId) {
-		return reservationService.getReservationById(reservationId);
 	}
 }
