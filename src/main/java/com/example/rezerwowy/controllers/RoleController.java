@@ -1,8 +1,10 @@
 package com.example.rezerwowy.controllers;
 
-import com.example.rezerwowy.exceptions.RoleNotFoundException;
+import com.example.rezerwowy.dtos.RoleDto;
+import com.example.rezerwowy.mappers.RoleMapper;
 import com.example.rezerwowy.models.Role;
 import com.example.rezerwowy.services.RoleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,40 +17,40 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleService roleService;
+    private final RoleMapper roleMapper;
 
     @GetMapping
-    public ResponseEntity<Collection<Role>> getRoles() {
-        return ResponseEntity.ok(roleService.getRoles());
+    public ResponseEntity<Collection<RoleDto>> getRoles() {
+        Collection<Role> roles = roleService.getRoles();
+        Collection<RoleDto> roleDtos = roles.stream()
+                .map(roleMapper::mapRoleToRoleDto)
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(roleDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Role> getRoleById(@PathVariable Long id) {
-        try {
-            Role role = roleService.getRoleById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(role);
-        } catch (RoleNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<RoleDto> getRoleById(@PathVariable("id") Long id) {
+        Role role = roleService.getRoleById(id);
+        RoleDto roleDto = roleMapper.mapRoleToRoleDto(role);
+
+        return ResponseEntity.status(HttpStatus.OK).body(roleDto);
     }
 
     @PostMapping
-    public ResponseEntity<Role> addRole(@RequestBody Role role) {
-        try {
-            roleService.addRole(role);
-            return ResponseEntity.ok(role);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<RoleDto> createRole(@RequestBody @Valid RoleDto roleDto) {
+        Role roleToCreate = roleMapper.mapRoleDtoToRole(roleDto);
+        Role createdRole = roleService.createRole(roleToCreate);
+        RoleDto createdRoleDto = roleMapper.mapRoleToRoleDto(createdRole);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRoleDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
-        try {
-            roleService.deleteRole(id);
-            return ResponseEntity.ok().build();
-        } catch (RoleNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) {
+        roleService.deleteRole(id);
+
+        return ResponseEntity.ok().build();
     }
 
 }

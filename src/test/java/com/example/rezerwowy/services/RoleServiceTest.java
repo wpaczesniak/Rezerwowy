@@ -1,7 +1,10 @@
 package com.example.rezerwowy.services;
 
+import com.example.rezerwowy.exceptions.RoleAlreadyExistsException;
+import com.example.rezerwowy.exceptions.RoleNotFoundException;
 import com.example.rezerwowy.models.Role;
 import com.example.rezerwowy.repositories.RoleRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class RoleServiceTest {
@@ -61,7 +67,37 @@ class RoleServiceTest {
     }
 
     @Test
-    void should_callAppropriateMethodInRepository_when_addRole() {
+    void should_returnObjectWithCorrectData_when_getRoleByIdAndItExists() {
+        //given
+        Role role = Role.builder()
+                .id(100L)
+                .name("Striker")
+                .build();
+        Long id = role.getId();
+        Mockito.when(roleRepository.findById(id)).thenReturn(Optional.of(role));
+
+        //when
+        Role foundRole = roleService.getRoleById(id);
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(foundRole.getId()).isEqualTo(role.getId()),
+                () -> assertThat(foundRole.getName()).isEqualTo(role.getName())
+        );
+    }
+
+    @Test
+    void should_throwException_when_getRoleByIdButItDoesntExist() {
+        //given
+        Long id = 100L;
+        Mockito.when(roleRepository.findById(id)).thenReturn(Optional.empty());
+
+        //when then
+        assertThatThrownBy(() -> roleService.getRoleById(id)).isInstanceOf(RoleNotFoundException.class);
+    }
+
+    @Test
+    void should_callAppropriateMethodInRepository_when_createRole() {
         // given
         Role role = Role.builder()
                 .id(100L)
@@ -70,10 +106,43 @@ class RoleServiceTest {
         Mockito.when(roleRepository.save(role)).thenReturn(role);
 
         // when
-        roleService.addRole(role);
+        roleService.createRole(role);
 
         // then
         Mockito.verify(roleRepository).save(role);
+    }
+
+    @Test
+    void should_returnObjectWithTheSameDate_when_createRole() {
+        //given
+        Role role = Role.builder()
+                .id(100L)
+                .name("Striker")
+                .build();
+        Mockito.when(roleRepository.save(role)).thenReturn(role);
+
+        //when
+        Role createdRole = roleService.createRole(role);
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(createdRole.getId()).isEqualTo(role.getId()),
+                () -> assertThat(createdRole.getName()).isEqualTo(role.getName())
+        );
+
+    }
+
+    @Test
+    void should_throwException_when_roleWithTheSameNameAlreadyExists() {
+        //given
+        Role role = Role.builder()
+                .id(100L)
+                .name("Striker")
+                .build();
+        Mockito.when(roleRepository.existsByName(role.getName())).thenReturn(true);
+
+        //when then
+        assertThatThrownBy(() -> roleService.createRole(role)).isInstanceOf(RoleAlreadyExistsException.class);
     }
 
     @Test
@@ -91,5 +160,15 @@ class RoleServiceTest {
 
         // then
         Mockito.verify(roleRepository).deleteById(id);
+    }
+
+    @Test
+    void should_throwException_when_deleteRoleByIdButItDoesntExist() {
+        //given
+        Long id = 100L;
+        Mockito.when(roleRepository.existsById(id)).thenReturn(false);
+
+        //when then
+        assertThatThrownBy(() -> roleService.deleteRole(id)).isInstanceOf(RoleNotFoundException.class);
     }
 }

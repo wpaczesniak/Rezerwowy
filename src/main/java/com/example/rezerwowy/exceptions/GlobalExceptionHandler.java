@@ -28,4 +28,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(PaymentNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(RoleAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(RoleAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<Void> handleException(RoleNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(TeamAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(TeamAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(TeamNotFoundException.class)
+    public ResponseEntity<Void> handleException(TeamNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
 }
