@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(
         name = "footballMatch",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "hostTeamId", "guestTeamId"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "host_team_id", "guest_team_id"})}
 )
 public class FootballMatch {
     @Id
