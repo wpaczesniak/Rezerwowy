@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 @Service
@@ -40,6 +41,7 @@ public class PaymentService {
         paymentRepository.deleteById(paymentId);
     }
 
+    @Deprecated
     @Transactional
     public String generatePaymentReceipt(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
@@ -47,7 +49,7 @@ public class PaymentService {
 
         int seatsCount = getSeatsCount(payment);
 //        int seatsCount = 2;
-        Money pricePerSeat = getPricePerSeat(payment);
+        Money pricePerSeat = Money.of(getPricePerSeat(payment), "PLN");
 //        Money pricePerSeat = Money.of(10.00, "PLN");
         Money totalAmount = calculateTotalAmount(seatsCount, pricePerSeat);
         Money taxTotalAmount = calculateTax(totalAmount);
@@ -60,7 +62,7 @@ public class PaymentService {
         return payment.getReservation().getSeats().size();
     }
 
-    private Money getPricePerSeat(Payment payment) {
+    private BigDecimal getPricePerSeat(Payment payment) {
         return payment.getReservation().getFootballMatch().getPricePerSeat();
     }
 

@@ -1,15 +1,15 @@
 package com.example.rezerwowy.dtos;
 
 import lombok.Builder;
-import org.javamoney.moneta.Money;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
 public record FootballMatchDto(
         Long id,
 
-        Money ticketPrice,
+        BigDecimal ticketPrice,
 
         LocalDateTime date,
 

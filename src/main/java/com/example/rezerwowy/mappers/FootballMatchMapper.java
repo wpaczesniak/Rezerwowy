@@ -9,30 +9,25 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FootballMatchMapper {
 
-    // private final TeamService teamService;
-
     public FootballMatchDto mapFootballMatchToFootballMatchDto(FootballMatch footballMatch) {
         return FootballMatchDto.builder()
                 .id(footballMatch.getId())
                 .ticketPrice(footballMatch.getPricePerSeat())
                 .date(footballMatch.getDate())
-                .hostTeamId(footballMatch.getHostTeam().getId())
-                .guestTeamId(footballMatch.getGuestTeam().getId())
-                .stadiumId(footballMatch.getStadium().getId())
+                .hostTeamId(footballMatch.getHostTeamId())
+                .guestTeamId(footballMatch.getGuestTeamId())
+                .stadiumId(footballMatch.getStadiumId())
                 .build();
     }
 
     public FootballMatch mapFootballMatchDtoToFootballMatch(FootballMatchDto footballMatchDto) {
-//        Team hostTeam = teamService.findById(footballMatchDto.hostTeamId());
-//        Team guestTeam = teamService.findById(footballMatchDto.guestTeamId());
-//
-//        return FootballMatch.builder()
-//                .id(footballMatchDto.id())
-//                .date(footballMatchDto.date())
-//                .hostTeam()
-//                .guestTeam()
-//                .stadium()
-//                .build()
-        return null;
+        return FootballMatch.builder()
+                .id(footballMatchDto.id())
+                .pricePerSeat(footballMatchDto.ticketPrice())
+                .date(footballMatchDto.date())
+                .hostTeamId(footballMatchDto.hostTeamId())
+                .guestTeamId(footballMatchDto.guestTeamId())
+                .stadiumId(footballMatchDto.stadiumId())
+                .build();
     }
 }

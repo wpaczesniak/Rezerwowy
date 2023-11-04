@@ -1,6 +1,7 @@
 package com.example.rezerwowy.services;
 
 import com.example.rezerwowy.dtos.FootballMatchDto;
+import com.example.rezerwowy.exceptions.FootballMatchAlreadyExistsException;
 import com.example.rezerwowy.exceptions.FootballMatchNotFoundException;
 import com.example.rezerwowy.factories.FootballMatchFactory;
 import com.example.rezerwowy.mappers.FootballMatchMapper;
@@ -95,6 +96,51 @@ public class FootballMatchServiceTest {
 
         // then
         Mockito.verify(footballMatchRepository).deleteById(id);
+    }
+
+    @Test
+    void should_saveFootballMatchInRepository_when_createFootballMatch() {
+        // given
+        FootballMatch match = FootballMatchFactory.createProperFootballMatchCase1();
+        FootballMatchMapper mapper = new FootballMatchMapper();
+        FootballMatchDto matchDto = mapper.mapFootballMatchToFootballMatchDto(match);
+        Mockito.when(
+                        footballMatchRepository.existsByDateAndHostTeamIdAndGuestTeamId(
+                                match.getDate(),
+                                match.getHostTeamId(),
+                                match.getGuestTeamId()
+                        ))
+                .thenReturn(false);
+        Mockito.when(footballMatchRepository.save(Mockito.any(FootballMatch.class))).thenReturn(match);
+
+        // when
+        footballMatchService.createFootballMatch(matchDto);
+
+        // then
+        Mockito.verify(footballMatchRepository).save(Mockito.any(FootballMatch.class));
+    }
+
+    @Test
+    void should_throwFootballMatchAlreadyExistsException_when_tryingToCreateTheMatchThatAlreadyExists() {
+        // given
+        FootballMatch match = FootballMatchFactory.createProperFootballMatchCase1();
+        FootballMatchMapper mapper = new FootballMatchMapper();
+        FootballMatchDto matchDto = mapper.mapFootballMatchToFootballMatchDto(match);
+        Mockito.when(
+                        footballMatchRepository.existsByDateAndHostTeamIdAndGuestTeamId(
+                                match.getDate(),
+                                match.getHostTeamId(),
+                                match.getGuestTeamId()
+                        ))
+                .thenReturn(true);
+
+        // when
+
+        // then
+        assertThrows(
+                FootballMatchAlreadyExistsException.class,
+                () -> footballMatchService.createFootballMatch(matchDto)
+        );
     }
 
 }

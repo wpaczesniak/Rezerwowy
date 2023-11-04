@@ -28,4 +28,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(PaymentNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(FootballMatchAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(FootballMatchAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(FootballMatchNotFoundException.class)
+    public ResponseEntity<Void> handleException(FootballMatchNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
 }

@@ -3,9 +3,8 @@ package com.example.rezerwowy.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.javamoney.moneta.Money;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "footballMatch")
+@Table(
+        name = "footballMatch",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "hostTeamId", "guestTeamId"})}
+)
 public class FootballMatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +24,17 @@ public class FootballMatch {
 
     @Builder.Default
     @Setter(AccessLevel.NONE)
-    private Money pricePerSeat = Money.of(10, "PLN");
+    private BigDecimal pricePerSeat = new BigDecimal("10.00");
 
     @NotNull
     private LocalDateTime date;
 
     @NotNull
-    @ManyToOne
-    private Team hostTeam;
+    private Long hostTeamId;
 
     @NotNull
-    @ManyToOne
-    private Team guestTeam;
+    private Long guestTeamId;
 
     @NotNull
-    @ManyToOne
-    private Stadium stadium;
+    private Long stadiumId;
 }

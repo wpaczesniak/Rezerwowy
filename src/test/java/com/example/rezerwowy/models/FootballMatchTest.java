@@ -5,13 +5,13 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 class FootballMatchTest {
     private static Validator validator;
 
@@ -36,13 +36,13 @@ class FootballMatchTest {
         assertThat(constraintViolations).isNotEmpty();
     }
 
-@Test
+    @Test
     void should_notValidate_when_hostTeamIsNull() {
         // given
         FootballMatch match = FootballMatchFactory.createProperFootballMatchCase1();
 
         // when
-        match.setHostTeam(null);
+        match.setHostTeamId(null);
 
         // then
         Set<ConstraintViolation<FootballMatch>> constraintViolations =
@@ -56,7 +56,7 @@ class FootballMatchTest {
         FootballMatch match = FootballMatchFactory.createProperFootballMatchCase1();
 
         // when
-        match.setGuestTeam(null);
+        match.setGuestTeamId(null);
 
         // then
         Set<ConstraintViolation<FootballMatch>> constraintViolations =
@@ -70,7 +70,7 @@ class FootballMatchTest {
         FootballMatch match = FootballMatchFactory.createProperFootballMatchCase1();
 
         // when
-        match.setStadium(null);
+        match.setStadiumId(null);
 
         // then
         Set<ConstraintViolation<FootballMatch>> constraintViolations =
