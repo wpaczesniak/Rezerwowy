@@ -36,8 +36,8 @@ class TeamServiceTest {
     void should_callAppropriateMethodInRepository_when_getAllTeams() {
         // given
         List<Team> teamList = Arrays.asList(
-                new Team(1L, "FC Barcelona", "FCB"),
-                new Team(2L, "Real Madrid", "RMA")
+                new Team(1L, "FC Barcelona", "FCB", null),
+                new Team(2L, "Real Madrid", "RMA", null)
         );
         Mockito.when(teamRepository.findAll()).thenReturn(teamList);
 
@@ -237,5 +237,4 @@ class TeamServiceTest {
         //when then
         assertThatThrownBy(() -> teamService.deleteTeam(id)).isInstanceOf(TeamNotFoundException.class);
     }
-
 }

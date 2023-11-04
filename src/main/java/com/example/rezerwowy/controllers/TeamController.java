@@ -59,7 +59,7 @@ public class TeamController {
     public ResponseEntity<Void> deleteTeam(@PathVariable("id") Long id) {
         teamService.deleteTeam(id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

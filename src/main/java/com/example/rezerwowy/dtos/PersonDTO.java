@@ -1,10 +1,6 @@
 package com.example.rezerwowy.dtos;
 
-import com.example.rezerwowy.models.Role;
-import com.example.rezerwowy.models.Team;
 import lombok.Builder;
-
-import java.util.List;
 
 @Builder
 public record PersonDTO(
@@ -12,5 +8,6 @@ public record PersonDTO(
         String name,
         String surname,
         Long teamId,
-        List<Role> roles
-) { }
+        Long roleId
+) {
+}

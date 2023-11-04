@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "role")
 @Builder
@@ -29,6 +32,7 @@ public class Role {
     @Size(max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
 
-    @OneToMany
-    private Set<Person> roleOwners;
+    @Builder.Default
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<Person> roleOwners = new HashSet<>();
 }

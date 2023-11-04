@@ -36,9 +36,9 @@ class RoleServiceTest {
     void should_callAppropriateMethodInRepository_when_getAllRoles() {
         // given
         List<Role> roleList = Arrays.asList(
-                new Role(1L, "Striker"),
-                new Role(2L, "Midfielder"),
-                new Role(3L, "Defender")
+                new Role(1L, "Striker", null),
+                new Role(2L, "Midfielder", null),
+                new Role(3L, "Defender", null)
         );
         Mockito.when(roleRepository.findAll()).thenReturn(roleList);
 

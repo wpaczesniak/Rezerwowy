@@ -50,7 +50,7 @@ public class RoleController {
     public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) {
         roleService.deleteRole(id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

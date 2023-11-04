@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "team")
 @Builder
@@ -39,7 +42,8 @@ public class Team {
     @Size(max = MAX_ABBREVIATION_LENGTH, message = ABBREVIATION_LENGTH_VALIDATION_MESSAGE)
     private String abbreviation;
 
-    @OneToMany
-    private Set<Person> teamMembers;
+    @Builder.Default
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<Person> teamMembers = new HashSet<>();
 
 }
