@@ -38,4 +38,8 @@ public class Team {
     @NotEmpty
     @Size(max = MAX_ABBREVIATION_LENGTH, message = ABBREVIATION_LENGTH_VALIDATION_MESSAGE)
     private String abbreviation;
+
+    @OneToMany
+    private Set<Person> teamMembers;
+
 }

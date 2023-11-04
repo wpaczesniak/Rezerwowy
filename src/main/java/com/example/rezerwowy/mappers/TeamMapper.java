@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TeamMapper {
+    @Lazy
+    private final TeamService teamService;
 
     public TeamDto mapTeamToTeamDto(Team team) {
         return TeamDto.builder()
@@ -22,5 +24,9 @@ public class TeamMapper {
                 .name(teamDto.name())
                 .abbreviation(teamDto.abbreviation())
                 .build();
+    }
+
+    public Team mapTeamIdToTeam(Long teamId) {
+        return teamService.getTeamById(teamId);
     }
 }

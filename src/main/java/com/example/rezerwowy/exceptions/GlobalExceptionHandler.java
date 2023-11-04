@@ -48,4 +48,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(TeamNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(PersonNotFoundException.class)
+    public ResponseEntity<Void> handleException(PersonNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(DuplicatePersonIdException.class)
+    public ResponseEntity<Void> handleException(DuplicatePersonIdException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
 }

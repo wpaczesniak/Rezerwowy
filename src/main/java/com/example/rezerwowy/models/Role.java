@@ -28,4 +28,7 @@ public class Role {
     @NotEmpty
     @Size(max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
+
+    @OneToMany
+    private Set<Person> roleOwners;
 }
