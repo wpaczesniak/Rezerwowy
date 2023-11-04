@@ -36,6 +36,7 @@ public class FootballMatchService {
         footballMatchRepository.deleteById(id);
     }
 
+    @Transactional
     public FootballMatchDto createFootballMatch(FootballMatchDto footballMatchDto) {
         if (footballMatchRepository.existsByDateAndHostTeamIdAndGuestTeamId(
                 footballMatchDto.date(),

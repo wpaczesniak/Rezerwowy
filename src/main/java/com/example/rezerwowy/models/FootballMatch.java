@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class FootballMatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "match_id")
     private Long id;
 
     @Builder.Default
@@ -27,14 +28,18 @@ public class FootballMatch {
     private BigDecimal pricePerSeat = new BigDecimal("10.00");
 
     @NotNull
+    @Column(name = "date")
     private LocalDateTime date;
 
     @NotNull
+    @Column(name = "host_team_id")
     private Long hostTeamId;
 
     @NotNull
+    @Column(name = "guest_team_id")
     private Long guestTeamId;
 
     @NotNull
+    @Column(name = "stadium_id")
     private Long stadiumId;
 }
