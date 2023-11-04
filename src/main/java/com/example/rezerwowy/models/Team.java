@@ -2,6 +2,7 @@ package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -26,6 +27,10 @@ public class Team {
     private static final String ABBREVIATION_LENGTH_VALIDATION_MESSAGE =
             "Abbreviation length must be less than " + MAX_ABBREVIATION_LENGTH + " characters";
 
+    private static final String REGEX_FOR_ABBREVIATION = "[A-Z]+";
+
+    private static final String ABBREVIATION_VALIDATION_MESSAGE = "Abbreviation must be 1-3 capital letters";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
@@ -40,6 +45,7 @@ public class Team {
     @Column(name = "team_abbreviation", length = MAX_ABBREVIATION_LENGTH, nullable = false)
     @NotEmpty
     @Size(max = MAX_ABBREVIATION_LENGTH, message = ABBREVIATION_LENGTH_VALIDATION_MESSAGE)
+    @Pattern(regexp = REGEX_FOR_ABBREVIATION, message = ABBREVIATION_VALIDATION_MESSAGE)
     private String abbreviation;
 
     @Builder.Default

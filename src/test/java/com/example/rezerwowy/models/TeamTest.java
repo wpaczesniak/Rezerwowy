@@ -166,6 +166,23 @@ class TeamTest {
 
         // then
         Set<ConstraintViolation<Team>> constraintViolations = validator.validate(team);
+        assertThat(constraintViolations).hasSize(2);
+    }
+
+    @Test
+    void should_notValidate_when_givenIncorrectAbbreviation() {
+        // given
+        Team team = Team.builder()
+                .id(100L)
+                .name("FC Barcelona")
+                .abbreviation("FCB")
+                .build();
+
+        // when
+        team.setAbbreviation("fcb");
+
+        // then
+        Set<ConstraintViolation<Team>> constraintViolations = validator.validate(team);
         assertThat(constraintViolations).hasSize(1);
     }
 
@@ -178,7 +195,7 @@ class TeamTest {
                 .abbreviation("FCB")
                 .build();
 
-        String abbreviation = "a".repeat(MAX_ABBREVIATION_LENGTH + 1);
+        String abbreviation = "A".repeat(MAX_ABBREVIATION_LENGTH + 1);
 
         // when
         team.setAbbreviation(abbreviation);
@@ -197,7 +214,7 @@ class TeamTest {
                 .abbreviation("FCB")
                 .build();
 
-        String abbreviation = "a".repeat(MAX_ABBREVIATION_LENGTH);
+        String abbreviation = "A".repeat(MAX_ABBREVIATION_LENGTH);
 
         // when
         team.setAbbreviation(abbreviation);
