@@ -1,13 +1,16 @@
 package com.example.rezerwowy.mappers;
 
+import com.example.rezerwowy.dtos.FootballMatchDto;
 import com.example.rezerwowy.dtos.ReservationDto;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.models.FootballMatch;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Seat;
+import com.example.rezerwowy.services.FootballMatchService;
 import com.example.rezerwowy.services.PaymentService;
 import com.example.rezerwowy.services.ReservationService;
+import com.example.rezerwowy.services.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -20,11 +23,12 @@ import java.util.stream.Collectors;
 public class ReservationMapper {
 	@Lazy
 	private final ReservationService reservationService;
-
+	@Lazy
+	private final FootballMatchService footballMatchService;
 	@Lazy
 	private final FootballMatchMapper footballMatchMapper;
 	@Lazy
-	private final SeatMapper seatMapper;
+	private final SeatService seatService;
 	@Lazy
 	private final PaymentService paymentService;
 
@@ -48,11 +52,15 @@ public class ReservationMapper {
 	}
 
 	public Reservation mapReservationDtoToReservation(ReservationDto reservationDto) {
-		FootballMatch footballMatch = footballMatchMapper
-				.mapFootballMatchtIdToFootballMatch(reservationDto.footballMatchId());
-		Set<Seat> seats = seatMapper
-				.mapSeatsIdToSeats(reservationDto.seatsId());
+		// TODO
+		FootballMatchDto footballMatchDto = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
+		FootballMatch footballMatch = footballMatchMapper.mapFootballMatchDtoToFootballMatch(footballMatchDto);
+
+		Set<Seat> seats = reservationDto.seatsId().stream()
+				.map(seatService::getSeatById)
+				.collect(Collectors.toSet());
 		Payment payment = null;
+
 		if (reservationDto.paymentId() != null) {
 			try {
 				payment = paymentService.getPaymentById(reservationDto.paymentId());
