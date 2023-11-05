@@ -255,7 +255,7 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.findById(payment.getId())).thenReturn(Optional.of(payment));
         Mockito.when(reservation.getSeats()).thenReturn(seats);
         Mockito.when(reservation.getFootballMatch()).thenReturn(footballMatch);
-        Mockito.when(footballMatch.getPricePerSeat()).thenReturn(pricePerSeat);
+        Mockito.when(Money.of(footballMatch.getPricePerSeat(), "PLN")).thenReturn(pricePerSeat);
     }
 
     private int countSubstringOccurrences(String input, String substring) {

@@ -10,6 +10,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 @Service
@@ -40,13 +41,16 @@ public class PaymentService {
         paymentRepository.deleteById(paymentId);
     }
 
+    @Deprecated
     @Transactional
     public String generatePaymentReceipt(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
         int seatsCount = getSeatsCount(payment);
-        Money pricePerSeat = getPricePerSeat(payment);
+//        int seatsCount = 2;
+        Money pricePerSeat = Money.of(getPricePerSeat(payment), "PLN");
+//        Money pricePerSeat = Money.of(10.00, "PLN");
         Money totalAmount = calculateTotalAmount(seatsCount, pricePerSeat);
         Money taxTotalAmount = calculateTax(totalAmount);
         String seatsList = generateSeatsList(seatsCount, pricePerSeat);
@@ -58,7 +62,7 @@ public class PaymentService {
         return payment.getReservation().getSeats().size();
     }
 
-    private Money getPricePerSeat(Payment payment) {
+    private BigDecimal getPricePerSeat(Payment payment) {
         return payment.getReservation().getFootballMatch().getPricePerSeat();
     }
 
