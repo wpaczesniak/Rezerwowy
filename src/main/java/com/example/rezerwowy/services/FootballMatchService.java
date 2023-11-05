@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FootballMatchService {
-	@Transactional
+	@Transactional(readOnly = true)
 	public FootballMatch getFootballMatchById(Long footballMatchId) {
 		return null;
 		// TODO

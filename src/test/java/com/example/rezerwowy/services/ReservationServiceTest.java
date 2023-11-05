@@ -30,7 +30,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_callAppropriateMethodInRepository_when_createReservation() {
+	void should_callAppropriateMethodInRepository_when_createReservation() {
 		//given
 		Reservation reservation = ReservationFactory.createProperReservationCase1();
 		Mockito.when(reservationRepository.save(reservation)).thenReturn(reservation);
@@ -43,7 +43,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_throwException_when_createReservationWithIdThatAlreadyExists() {
+	void should_throwException_when_createReservationWithIdThatAlreadyExists() {
 		//given
 		Reservation reservation = ReservationFactory.createProperReservationCase1();
 		Mockito.when(reservationRepository.existsById(reservation.getId())).thenReturn(true);
@@ -54,7 +54,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_callAppropriateMethodInRepository_when_getReservationById() {
+	void should_callAppropriateMethodInRepository_when_getReservationById() {
 		//given
 		Reservation reservation = ReservationFactory.createProperReservationCase1();
 		Mockito.when(reservationRepository.findById(reservation.getId())).thenReturn(java.util.Optional.of(reservation));
@@ -67,7 +67,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_throwException_when_getReservationByIdDoesntExist() {
+	void should_throwException_when_getReservationByIdDoesntExist() {
 		// given
 		Reservation reservation = ReservationFactory.createProperReservationCase2();
 		Long id = reservation.getId();
@@ -79,7 +79,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_callAppropriateMethodInRepository_when_deleteReservationById() {
+	void should_callAppropriateMethodInRepository_when_deleteReservationById() {
 		//given
 		Reservation reservation = ReservationFactory.createProperReservationCase1();
 		Long id = reservation.getId();
@@ -93,7 +93,7 @@ class ReservationServiceTest {
 	}
 
 	@Test
-	public void should_throwException_when_deleteReservationByIdButItDoesntExist() {
+	void should_throwException_when_deleteReservationByIdButItDoesntExist() {
 		//given
 		Reservation reservation = ReservationFactory.createProperReservationCase1();
 		Long id = reservation.getId();

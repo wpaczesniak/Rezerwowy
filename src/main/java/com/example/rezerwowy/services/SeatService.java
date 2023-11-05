@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Service
 public class SeatService {
-	@Transactional
+	@Transactional(readOnly = true)
 	public Set<Seat> getSeatsByIds(Set<Long> seatId) {
 		return null;
 		// TODO

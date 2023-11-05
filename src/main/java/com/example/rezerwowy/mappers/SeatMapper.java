@@ -3,10 +3,10 @@ package com.example.rezerwowy.mappers;
 import com.example.rezerwowy.services.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class SeatMapper {
 	@Lazy

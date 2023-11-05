@@ -23,7 +23,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_nameIsNull() {
+	void should_notValidate_when_nameIsNull() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase1();
 
@@ -37,7 +37,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_nameIsEmpty() {
+	void should_notValidate_when_nameIsEmpty() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
 
@@ -51,7 +51,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_validate_when_nameIs3CharsLong() {
+	void should_validate_when_nameIs3CharsLong() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase1();
         String name = "Jan";
@@ -66,7 +66,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_validate_when_nameIs9CharsLong() {
+	void should_validate_when_nameIs9CharsLong() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase3();
         String name = "Krzysztof";
@@ -81,7 +81,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_validate_when_nameContainsUnicodeChars() {
+	void should_validate_when_nameContainsUnicodeChars() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase3();
         String name = "Mściwój";
@@ -96,7 +96,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_nameIs70CharsLong() {
+	void should_notValidate_when_nameIs70CharsLong() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase1();
         String name = "Alicja Ewa".repeat(7);
@@ -111,7 +111,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_surnameIsNull() {
+	void should_notValidate_when_surnameIsNull() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
 
@@ -125,7 +125,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_validate_when_surnameIs5CharsLong() {
+	void should_validate_when_surnameIs5CharsLong() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
         String surname = "Nowak";
@@ -140,7 +140,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_surnameIs80CharsLong() {
+	void should_notValidate_when_surnameIs80CharsLong() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase1();
         String surname = "RICHARDSON".repeat(8);
@@ -155,7 +155,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_emailIsNull() {
+	void should_notValidate_when_emailIsNull() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
 
@@ -169,7 +169,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_validate_when_emailIsProper() {
+	void should_validate_when_emailIsProper() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
         String email = "john123@mail.com";
@@ -184,7 +184,7 @@ class BuyerTest {
     }
 
     @Test
-    public void should_notValidate_when_emailHasWrongFormat() {
+	void should_notValidate_when_emailHasWrongFormat() {
         // given
         Buyer buyer = BuyerFactory.createProperBuyerCase2();
         String email = "www.my.page.com";
