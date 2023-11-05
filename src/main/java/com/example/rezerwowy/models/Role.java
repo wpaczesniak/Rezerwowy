@@ -1,7 +1,7 @@
 package com.example.rezerwowy.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class Role {
     private Long id;
 
     @Column(name = "role_name", length = MAX_NAME_LENGTH, nullable = false, unique = true)
-    @NotEmpty
+    @NotBlank
     @Size(max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
 

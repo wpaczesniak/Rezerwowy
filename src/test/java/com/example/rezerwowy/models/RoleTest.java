@@ -39,6 +39,23 @@ class RoleTest {
     }
 
     @Test
+    void should_notValidate_when_nameContainsBlankCharsOnly() {
+        // given
+        Role role = Role.builder()
+                .id(100L)
+                .name("FC Barcelona")
+                .build();
+        String name = " ";
+
+        // when
+        role.setName(name);
+
+        // then
+        Set<ConstraintViolation<Role>> constraintViolations = validator.validate(role);
+        assertThat(constraintViolations).hasSize(1);
+    }
+
+    @Test
     void should_notValidate_when_nameIsEmpty() {
         // given
         Role role = Role.builder()

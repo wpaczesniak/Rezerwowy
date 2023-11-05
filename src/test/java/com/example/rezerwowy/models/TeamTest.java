@@ -42,6 +42,24 @@ class TeamTest {
     }
 
     @Test
+    void should_notValidate_when_nameContainsBlankCharsOnly() {
+        // given
+        Team team = Team.builder()
+                .id(100L)
+                .name("FC Barcelona")
+                .abbreviation("FCB")
+                .build();
+        String name = " ".repeat(MIN_NAME_LENGTH);
+
+        // when
+        team.setName(name);
+
+        // then
+        Set<ConstraintViolation<Team>> constraintViolations = validator.validate(team);
+        assertThat(constraintViolations).hasSize(1);
+    }
+
+    @Test
     void should_notValidate_when_nameIsEmpty() {
         // given
         Team team = Team.builder()
@@ -166,7 +184,7 @@ class TeamTest {
 
         // then
         Set<ConstraintViolation<Team>> constraintViolations = validator.validate(team);
-        assertThat(constraintViolations).hasSize(2);
+        assertThat(constraintViolations).hasSize(1);
     }
 
     @Test
