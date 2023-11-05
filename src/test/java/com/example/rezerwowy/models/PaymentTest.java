@@ -23,7 +23,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_notValidate_when_dateIsNull() {
+    void should_notValidate_when_dateIsNull() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
 
@@ -37,7 +37,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_validate_when_dateIsInThePast() {
+    void should_validate_when_dateIsInThePast() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.now().minusYears(1);
@@ -52,7 +52,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_validate_when_dateIsInToday() {
+    void should_validate_when_dateIsInToday() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase3();
         LocalDate date = LocalDate.now();
@@ -67,7 +67,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_notValidate_when_dateIsInTheFuture() {
+    void should_notValidate_when_dateIsInTheFuture() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         LocalDate date = LocalDate.now().plusYears(1).plusDays(4);
@@ -82,7 +82,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_notValidate_when_buyerIsNull() {
+    void should_notValidate_when_buyerIsNull() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
 
@@ -96,7 +96,7 @@ class PaymentTest {
     }
 
     @Test
-    public void should_validate_when_paymentIsProper() {
+    void should_validate_when_paymentIsProper() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase2();
 

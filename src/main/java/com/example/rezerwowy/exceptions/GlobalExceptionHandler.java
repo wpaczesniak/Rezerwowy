@@ -28,4 +28,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(PaymentNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+
+	@ExceptionHandler(ReservationAlreadyExistsException.class)
+	public ResponseEntity<Void> handleException(ReservationAlreadyExistsException e) {
+		return ResponseEntity.badRequest().build();
+	}
+
+	@ExceptionHandler(ReservationNotFoundException.class)
+	public ResponseEntity<Void> handleException(ReservationNotFoundException e) {
+		return ResponseEntity.notFound().build();
+	}
 }
