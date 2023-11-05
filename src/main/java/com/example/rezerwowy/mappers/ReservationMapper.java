@@ -3,6 +3,7 @@ package com.example.rezerwowy.mappers;
 import com.example.rezerwowy.dtos.FootballMatchDto;
 import com.example.rezerwowy.dtos.ReservationDto;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
+import com.example.rezerwowy.exceptions.ReservationNotFoundException;
 import com.example.rezerwowy.models.FootballMatch;
 import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
@@ -21,8 +22,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class ReservationMapper {
-	@Lazy
-	private final ReservationService reservationService;
 	@Lazy
 	private final FootballMatchService footballMatchService;
 	@Lazy
@@ -45,22 +44,30 @@ public class ReservationMapper {
 		return ReservationDto.builder()
 				.id(reservation.getId())
 				.publicId(reservation.getPublicId())
-				.seatsId(seatsId)
+				.comment(reservation.getComment())
+				.seatIds(seatsId)
 				.footballMatchId(matchId)
 				.paymentId(paymentId)
 				.build();
 	}
 
 	public Reservation mapReservationDtoToReservation(ReservationDto reservationDto) {
-		// TODO
-		FootballMatchDto footballMatchDto = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
-		FootballMatch footballMatch = footballMatchMapper.mapFootballMatchDtoToFootballMatch(footballMatchDto);
+		FootballMatch footballMatch = null;
+		if (reservationDto.footballMatchId() != null) {
+			try {
+				FootballMatchDto footballMatchDto = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
+				footballMatchMapper.mapFootballMatchDtoToFootballMatch(footballMatchDto);
+			} catch (ReservationNotFoundException ignored) { }
+		}
 
-		Set<Seat> seats = reservationDto.seatsId().stream()
-				.map(seatService::getSeatById)
-				.collect(Collectors.toSet());
+		Set<Seat> seats = null;
+		if (reservationDto.seatIds() != null) {
+			try {
+				seats = seatService.getSeatsByIds(reservationDto.seatIds());
+			} catch (ReservationNotFoundException ignored) { }
+		}
+
 		Payment payment = null;
-
 		if (reservationDto.paymentId() != null) {
 			try {
 				payment = paymentService.getPaymentById(reservationDto.paymentId());
@@ -69,6 +76,7 @@ public class ReservationMapper {
 
 		return Reservation.builder()
 				.id(reservationDto.id())
+				.comment(reservationDto.comment())
 				.footballMatch(footballMatch)
 				.seats(seats)
 				.payment(payment)

@@ -10,7 +10,8 @@ import java.util.UUID;
 public record ReservationDto(
 		Long id,
 		UUID publicId,
-		Set<Long> seatsId,
+		String comment,
+		Set<Long> seatIds,
 		Long footballMatchId,
 		Long paymentId
 ) { }

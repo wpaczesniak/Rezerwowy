@@ -2,8 +2,10 @@ package com.example.rezerwowy.mappers;
 
 import com.example.rezerwowy.dtos.FootballMatchDto;
 import com.example.rezerwowy.models.FootballMatch;
+import com.example.rezerwowy.services.FootballMatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
 
 @Component
 @RequiredArgsConstructor
