@@ -24,7 +24,6 @@ import java.util.Set;
 public class Stadium {
 
     @Id
-    @OneToMany
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stadium_id")
     private Long id;
@@ -39,10 +38,10 @@ public class Stadium {
 
     @Column(name = "capacity")
     @NotNull
-    private int capacity;
+    private Integer capacity;
 
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "stadium")
     private Set<FootballMatch> footballMatches;
 
     @JoinColumn(name = "seat_id")
