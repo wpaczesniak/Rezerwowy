@@ -63,7 +63,9 @@ public class ReservationMapper {
 		Set<Seat> seats = null;
 		if (reservationDto.seatIds() != null) {
 			try {
-				seats = seatService.getSeatsByIds(reservationDto.seatIds());
+				seats = reservationDto.seatIds().stream()
+						.map(seatService::getSeatById)
+						.collect(Collectors.toSet());
 			} catch (ReservationNotFoundException ignored) { }
 		}
 

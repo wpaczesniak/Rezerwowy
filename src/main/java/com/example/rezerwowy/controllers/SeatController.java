@@ -40,16 +40,16 @@ public class SeatController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<SeatDto> getSeatById(@PathVariable("id") Set<Long> seatId) {
-        Set<Seat> seat =  seatService.getSeatsByIds( seatId);
+    public ResponseEntity<SeatDto> getSeatById(@PathVariable("id") Long seatId) {
+        Seat seat =  seatService.getSeatById(seatId);
         SeatDto seatDto = seatMapper.mapSeatToSeatDto(seat);
         
         return ResponseEntity.status(HttpStatus.OK).body(seatDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSeatById(@PathVariable("id") Set<Long> seatId) {
-            seatService.getSeatsByIds(seatId);
+    public ResponseEntity<Void> deleteSeatById(@PathVariable("id") Long seatId) {
+            seatService.deleteSeatById(seatId);
         
         return ResponseEntity.ok().build();
     }

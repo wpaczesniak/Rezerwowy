@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.annotations.Comment;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.example.rezerwowy.dtos.SeatDto;
@@ -25,7 +26,7 @@ import com.example.rezerwowy.models.Stadium;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class StadiumMapper {
     @Lazy
@@ -36,6 +37,9 @@ public class StadiumMapper {
 
     @Lazy
     private final FootballMatchService footballMatchService;
+
+    @Lazy
+    private final FootballMatchMapper footballMatchMapper;
 
     public StadiumDto mapStadiumToStadiumDto(Stadium stadium) {
         Set<Long> seatsIds = stadium.getSeats() != null
@@ -57,13 +61,18 @@ public class StadiumMapper {
         Set<Seat> seats = null;
         if (stadiumDto.seatIds() != null) {
             try {
-                seats = seatService.getSeatsByIds(stadiumDto.seatIds());
+                seats = stadiumDto.seatIds().stream()
+                        .map(seatService::getSeatById)
+                        .collect(Collectors.toSet());
             } catch (ReservationNotFoundException ignored) { }
         }
         Set<FootballMatch> footballMatches = null;
         if (stadiumDto.footballMatchIds() != null) {
             try {
-                footballMatches = footballMatchService.getFootballMatchById(stadiumDto.footballMatchIds());
+                footballMatches = stadiumDto.footballMatchIds().stream()
+                        .map(footballMatchService::getFootballMatchById)
+                        .map(footballMatchMapper::mapFootballMatchDtoToFootballMatch)
+                        .collect(Collectors.toSet());
             } catch (SeatNotFoundException ignored) { }
         }
         return Stadium.builder()

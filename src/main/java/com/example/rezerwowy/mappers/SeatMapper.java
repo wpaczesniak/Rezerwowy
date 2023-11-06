@@ -8,16 +8,14 @@ import com.example.rezerwowy.models.Stadium;
 import com.example.rezerwowy.services.ReservationService;
 import com.example.rezerwowy.services.SeatService;
 import com.example.rezerwowy.services.StadiumService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
-
-@Service
+@Component
 @RequiredArgsConstructor
 public class SeatMapper {
 	@Lazy
@@ -29,17 +27,14 @@ public class SeatMapper {
 	@Lazy
 	private final ReservationService reservationService;
 
-	public SeatDto mapSeatToSeatDto(Set<Seat> seats) {
+	public SeatDto mapSeatToSeatDto(Seat seat) {
 		Long stadiumId = null;
 		Long reservationId = null;
-		if (!seats.isEmpty()) {
-			Seat seat = seats.iterator().next();
-			stadiumId = seat.getStadium() != null ? seat.getStadium().getId() : null;
-			reservationId = seat.getReservation() != null ? seat.getReservation().getId() : null;
-		}
+		stadiumId = seat.getStadium() != null ? seat.getStadium().getId() : null;
+		reservationId = seat.getReservation() != null ? seat.getReservation().getId() : null;
 		return SeatDto.builder()
-				.id(seats.iterator().next().getId())
-				.seatNumber(seats.iterator().next().getSeatNumber())
+				.id(seat.getId())
+				.seatNumber(seat.getSeatNumber())
 				.stadiumId(stadiumId)
 				.reservationId(reservationId)
 				.build();
@@ -67,8 +62,4 @@ public class SeatMapper {
 				.stadium(stadium)
 				.build();
 	}
-
-    public SeatDto mapSeatToSeatDto(Seat createdSeat) {
-        return null;
-    }
 }

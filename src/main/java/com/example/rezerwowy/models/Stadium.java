@@ -41,7 +41,7 @@ public class Stadium {
     private Integer capacity;
 
 
-    @OneToMany(mappedBy = "stadium")
+    @OneToMany
     private Set<FootballMatch> footballMatches;
 
     @JoinColumn(name = "seat_id")

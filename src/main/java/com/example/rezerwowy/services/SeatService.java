@@ -24,17 +24,9 @@ public class SeatService {
 
 
     @Transactional
-    public Set<Seat> getSeatsByIds(Set<Long> seatIds) {
-        Set<Seat> seats = new HashSet<>();
-
-        for (Long seatId : seatIds) {
-            Seat seat = seatRepository.findById(seatId).orElse(null);
-            if (seat != null) {
-                seats.add(seat);
-            }
-        }
-
-        return seats;
+    public Seat getSeatById(Long seatId) {
+        Seat seat = seatRepository.findById(seatId).orElse(null);
+        return seat;
     }
 
     @Transactional
@@ -46,13 +38,11 @@ public class SeatService {
     }
 
 	@Transactional
-    public void deleteSeatsByIds(Set<Long> seatIds) {
-        for (Long seatId : seatIds) {
-            if (!seatRepository.existsById(seatId)) {
-                throw new SeatNotFoundException(seatId);
-            }
-            seatRepository.deleteById(seatId);
+    public void deleteSeatById(Long seatId) {
+        if (!seatRepository.existsById(seatId)) {
+            throw new SeatNotFoundException(seatId);
         }
+        seatRepository.deleteById(seatId);
     }
 }
 
