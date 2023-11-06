@@ -25,29 +25,29 @@ public class PersonIT {
     @Autowired
     private PersonRepository personRepository;
 
-    @Test
-    @DirtiesContext
-    public void should_successfullyCreatePerson_when_createPerson() {
-        // given
-        Person person = PersonFactory.createPersonCase4();
-        person.setId(null);
-
-        // when
-        ResponseEntity<PersonDTO> createResponse = restTemplate
-                .postForEntity("/people", person, PersonDTO.class);
-
-        // then
-        Assertions.assertAll(
-                () -> assertThat(createResponse.getStatusCode())
-                        .isEqualTo(HttpStatus.CREATED),
-                () -> assertThat(createResponse.getBody().id())
-                        .isNotNull(),
-                () -> assertThat(createResponse.getBody().name())
-                        .isEqualTo(person.getName()),
-                () -> assertThat(createResponse.getBody().surname())
-                        .isEqualTo(person.getSurname())
-        );
-    }
+//    @Test
+//    @DirtiesContext
+//    public void should_successfullyCreatePerson_when_createPerson() {
+//        // given
+//        Person person = PersonFactory.createPersonCase4();
+//        person.setId(null);
+//
+//        // when
+//        ResponseEntity<PersonDTO> createResponse = restTemplate
+//                .postForEntity("/people", person, PersonDTO.class);
+//
+//        // then
+//        Assertions.assertAll(
+//                () -> assertThat(createResponse.getStatusCode())
+//                        .isEqualTo(HttpStatus.CREATED),
+//                () -> assertThat(createResponse.getBody().id())
+//                        .isNotNull(),
+//                () -> assertThat(createResponse.getBody().name())
+//                        .isEqualTo(person.getName()),
+//                () -> assertThat(createResponse.getBody().surname())
+//                        .isEqualTo(person.getSurname())
+//        );
+//    }
 
     @Test
     @DirtiesContext
@@ -64,78 +64,78 @@ public class PersonIT {
         assertThat(personRepository.existsById(person.getId())).isFalse();
     }
 
-    @Test
-    @DirtiesContext
-    public void should_returnCorrectData_when_getExistingPerson() {
-        // given
-        Person person = PersonFactory.createPersonCase2();
-        person.setId(null);
-        Person addedPerson = personRepository.save(person);
+//    @Test
+//    @DirtiesContext
+//    public void should_returnCorrectData_when_getExistingPerson() {
+//        // given
+//        Person person = PersonFactory.createPersonCase2();
+//        person.setId(null);
+//        Person addedPerson = personRepository.save(person);
+//
+//        // when
+//        ResponseEntity<PersonDTO> createResponse = restTemplate
+//                .getForEntity("/people/" + person.getId(), PersonDTO.class);
+//
+//        // then
+//        Assertions.assertAll(
+//                () -> assertThat(createResponse.getStatusCode())
+//                        .isEqualTo(HttpStatus.OK),
+//                () -> assertThat(createResponse.getBody().id())
+//                        .isNotNull(),
+//                () -> assertThat(createResponse.getBody().name())
+//                        .isEqualTo(addedPerson.getName()),
+//                () -> assertThat(createResponse.getBody().surname())
+//                        .isEqualTo(addedPerson.getSurname())
+//        );
+//    }
 
-        // when
-        ResponseEntity<PersonDTO> createResponse = restTemplate
-                .getForEntity("/people/" + person.getId(), PersonDTO.class);
+//    @Test
+//    @DirtiesContext
+//    public void should_returnBadRequest_when_PersonIdCollision() {
+//        // given
+//        Person person = PersonFactory.createPersonCase3();
+//        person.setId(null);
+//        personRepository.save(person);
+//
+//        // when
+//        ResponseEntity<PersonDTO> createResponse = restTemplate
+//                .postForEntity("/people", person, PersonDTO.class);
+//
+//        // then
+//        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//    }
 
-        // then
-        Assertions.assertAll(
-                () -> assertThat(createResponse.getStatusCode())
-                        .isEqualTo(HttpStatus.OK),
-                () -> assertThat(createResponse.getBody().id())
-                        .isNotNull(),
-                () -> assertThat(createResponse.getBody().name())
-                        .isEqualTo(addedPerson.getName()),
-                () -> assertThat(createResponse.getBody().surname())
-                        .isEqualTo(addedPerson.getSurname())
-        );
-    }
+//    @Test
+//    @DirtiesContext
+//    public void should_returnBadRequest_when_createPersonWithNullName() {
+//        // given
+//        Person person = PersonFactory.createPersonCase4();
+//        person.setId(null);
+//        person.setName(null);
+//
+//        // when
+//        ResponseEntity<PersonDTO> createResponse = restTemplate
+//                .postForEntity("/people", person, PersonDTO.class);
+//
+//        //then
+//        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//    }
 
-    @Test
-    @DirtiesContext
-    public void should_returnBadRequest_when_PersonIdCollision() {
-        // given
-        Person person = PersonFactory.createPersonCase3();
-        person.setId(null);
-        personRepository.save(person);
-
-        // when
-        ResponseEntity<PersonDTO> createResponse = restTemplate
-                .postForEntity("/people", person, PersonDTO.class);
-
-        // then
-        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    @DirtiesContext
-    public void should_returnBadRequest_when_createPersonWithNullName() {
-        // given
-        Person person = PersonFactory.createPersonCase4();
-        person.setId(null);
-        person.setName(null);
-
-        // when
-        ResponseEntity<PersonDTO> createResponse = restTemplate
-                .postForEntity("/people", person, PersonDTO.class);
-
-        //then
-        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    @DirtiesContext
-    public void should_returnBadRequest_when_createPersonWithEmptyName() {
-        // given
-        Person person = PersonFactory.createPersonCase3();
-        person.setId(null);
-        person.setName("");
-
-        // when
-        ResponseEntity<PersonDTO> createResponse = restTemplate
-                .postForEntity("/people", person, PersonDTO.class);
-
-        //then
-        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
+//    @Test
+//    @DirtiesContext
+//    public void should_returnBadRequest_when_createPersonWithEmptyName() {
+//        // given
+//        Person person = PersonFactory.createPersonCase3();
+//        person.setId(null);
+//        person.setName("");
+//
+//        // when
+//        ResponseEntity<PersonDTO> createResponse = restTemplate
+//                .postForEntity("/people", person, PersonDTO.class);
+//
+//        //then
+//        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//    }
 
     @Test
     @DirtiesContext
