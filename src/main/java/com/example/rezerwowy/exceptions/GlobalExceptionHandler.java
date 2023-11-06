@@ -29,15 +29,44 @@ public class GlobalExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
-	@ExceptionHandler(ReservationAlreadyExistsException.class)
-	public ResponseEntity<Void> handleException(ReservationAlreadyExistsException e) {
-		return ResponseEntity.badRequest().build();
-	}
+    @ExceptionHandler(RoleAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(RoleAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
 
-	@ExceptionHandler(ReservationNotFoundException.class)
-	public ResponseEntity<Void> handleException(ReservationNotFoundException e) {
-		return ResponseEntity.notFound().build();
-	}
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<Void> handleException(RoleNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(TeamAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(TeamAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(TeamNotFoundException.class)
+    public ResponseEntity<Void> handleException(TeamNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(PersonNotFoundException.class)
+    public ResponseEntity<Void> handleException(PersonNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(DuplicatePersonIdException.class)
+    public ResponseEntity<Void> handleException(DuplicatePersonIdException e) {
+        return ResponseEntity.badRequest().build();
+    }
+    @ExceptionHandler(ReservationAlreadyExistsException.class)
+    public ResponseEntity<Void> handleException(ReservationAlreadyExistsException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(ReservationNotFoundException.class)
+    public ResponseEntity<Void> handleException(ReservationNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
 
     @ExceptionHandler(FootballMatchAlreadyExistsException.class)
     public ResponseEntity<Void> handleException(FootballMatchAlreadyExistsException e) {
@@ -48,4 +77,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(FootballMatchNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+
 }
