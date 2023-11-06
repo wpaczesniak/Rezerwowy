@@ -29,6 +29,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
+	@ExceptionHandler(ReservationAlreadyExistsException.class)
+	public ResponseEntity<Void> handleException(ReservationAlreadyExistsException e) {
+		return ResponseEntity.badRequest().build();
+	}
+
+	@ExceptionHandler(ReservationNotFoundException.class)
+	public ResponseEntity<Void> handleException(ReservationNotFoundException e) {
+		return ResponseEntity.notFound().build();
+	}
+
     @ExceptionHandler(FootballMatchAlreadyExistsException.class)
     public ResponseEntity<Void> handleException(FootballMatchAlreadyExistsException e) {
         return ResponseEntity.badRequest().build();
