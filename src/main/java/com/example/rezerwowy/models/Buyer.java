@@ -3,7 +3,7 @@ package com.example.rezerwowy.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -28,17 +28,17 @@ public class Buyer {
             "Email length should be between " + MIN_FIELD_LENGTH  + " and " + MAX_EMAIL_LENGTH + " characters";
 
     @Column(name = "buyer_name", nullable = false, length = MAX_NAME_LENGTH)
-    @NotEmpty
+    @NotBlank
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = NAME_LENGTH_VALIDATION_MESSAGE)
     private String name;
 
     @Column(name = "buyer_surname", nullable = false, length = MAX_SURNAME_LENGTH)
-    @NotEmpty
+    @NotBlank
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = SURNAME_LENGTH_VALIDATION_MESSAGE)
     private String surname;
 
     @Column(name = "buyer_email", nullable = false, length = MAX_EMAIL_LENGTH)
-    @NotEmpty
+    @NotBlank
     @Size(min = MIN_FIELD_LENGTH, max = MAX_NAME_LENGTH, message = EMAIL_LENGTH_VALIDATION_MESSAGE)
     @Email
     private String email;
