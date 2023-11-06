@@ -9,7 +9,7 @@ public class SeatFactory {
         return Seat.builder()
             .id(id++)
             .seatNumber(1L)
-            .stadiumId(1L)
+            .stadium(1L)
             .build();
     }
 
@@ -17,7 +17,7 @@ public class SeatFactory {
         return Seat.builder()
             .id(id++)
             .seatNumber(2L)
-            .stadiumId(1L)
+            .stadium(1L)
             .build();
     }
 
@@ -25,7 +25,7 @@ public class SeatFactory {
         return Seat.builder()
             .id(id++)
             .seatNumber(3L)
-            .stadiumId(1L)
+            .stadium(1L)
             .build();
     }
 }

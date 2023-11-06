@@ -11,5 +11,7 @@ public record StadiumDto(
     String city, 
     int capacity,
     Long matchId,
+
+    Set<Long>  footballMatchIds,
     Set<Long> seatIds
 ) { } 

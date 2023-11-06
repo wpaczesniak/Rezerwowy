@@ -1,13 +1,6 @@
 package com.example.rezerwowy.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -16,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "stadium")
@@ -28,8 +23,6 @@ import lombok.ToString;
 
 public class Stadium {
 
-    private static final int CAPACITY = 50000;
-    private static final String CAPACITY_VALIDATION_MESSAGE = "Capacity should be less than " + CAPACITY;
     @Id
     @OneToMany
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +38,15 @@ public class Stadium {
     private String city;
 
     @Column(name = "capacity")
-    @Size(max = CAPACITY, message = CAPACITY_VALIDATION_MESSAGE)
     @NotNull
     private int capacity;
+
+
+    @OneToMany(mappedBy = "reservation")
+    private Set<FootballMatch> footballMatches;
+
+    @JoinColumn(name = "seat_id")
+    @OneToMany
+    Set<Seat> seats;
 
 }

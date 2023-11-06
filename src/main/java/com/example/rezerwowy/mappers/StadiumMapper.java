@@ -1,6 +1,7 @@
 package com.example.rezerwowy.mappers;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.Comment;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -37,49 +38,40 @@ public class StadiumMapper {
     private final FootballMatchService footballMatchService;
 
     public StadiumDto mapStadiumToStadiumDto(Stadium stadium) {
-        Set<Long> seatsId = stadium.getSeats() != null
-                ? stadium.getSeats().getId()
+        Set<Long> seatsIds = stadium.getSeats() != null
+                ? stadium.getSeats().stream().map(Seat::getId).collect(Collectors.toSet())
                 : null;
-        Long reservation = stadium.getReservation() != null
-                ? stadium.getReservation().getId()
-                : null;
-        Long matchId = stadium.getFootballMatch() != null
-                ? stadium.getFootballMatch().getId()
+        Set<Long> matchId = stadium.getFootballMatches() != null
+                ? stadium.getFootballMatches().stream().map(FootballMatch::getId).collect(Collectors.toSet())
                 : null;
         return StadiumDto.builder()
                 .id(stadium.getId())
-                .stadiumName(stadium.getStadiumName())
+                .name(stadium.getName())
                 .capacity(stadium.getCapacity())
-                .seatId(seatsId)
-                .footballMatchId(matchId)
+                .seatIds(seatsIds)
+                .footballMatchIds(matchId)
                 .build();
     }
 
     public Stadium mapStadiumDtoToStadium(StadiumDto stadiumDto) {
-        Seat seat = null;
-        if (stadiumDto.seatId() != null) {
+        Set<Seat> seats = null;
+        if (stadiumDto.seatIds() != null) {
             try {
-                seat = seatService.getSeatById(stadiumDto.seatId());
-            } catch (SeatNotFoundException ignored) { }
-        }
-        Reservation reservation = null;
-        if (stadiumDto.reservationId() != null) {
-            try {
-                reservation = reservationService.getReservationById(stadiumDto.reservationId());
+                seats = seatService.getSeatsByIds(stadiumDto.seatIds());
             } catch (ReservationNotFoundException ignored) { }
         }
-        FootballMatch footballMatch = null;
-        if (stadiumDto.footballMatchId() != null) {
+        Set<FootballMatch> footballMatches = null;
+        if (stadiumDto.footballMatchIds() != null) {
             try {
-                footballMatch = footballMatchService.getFootballMatchById(stadiumDto.footballMatchId());
+                footballMatches = footballMatchService.getFootballMatchById(stadiumDto.footballMatchIds());
             } catch (SeatNotFoundException ignored) { }
         }
         return Stadium.builder()
                 .id(stadiumDto.id())
-                .stadiumName(stadiumDto.stadiumName())
+                .name(stadiumDto.name())
                 .capacity(stadiumDto.capacity())
-                .seat(seat)
-                .footballMatch(footballMatch)
+                .seats(seats)
+                .footballMatches(footballMatches)
                 .build();
     }
 }
