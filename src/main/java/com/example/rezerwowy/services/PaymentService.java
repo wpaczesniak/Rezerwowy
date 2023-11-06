@@ -56,10 +56,18 @@ public class PaymentService {
     }
 
     private int getSeatsCount(Payment payment) {
+        if (payment.getReservation() == null)
+            return 0;
+        if (payment.getReservation().getSeats() == null)
+            return 0;
         return payment.getReservation().getSeats().size();
     }
 
     private BigDecimal getPricePerSeat(Payment payment) {
+        if (payment.getReservation() == null)
+            return BigDecimal.ZERO;
+        if (payment.getReservation().getFootballMatch() == null)
+            return BigDecimal.ZERO;
         return payment.getReservation().getFootballMatch().getPricePerSeat();
     }
 
