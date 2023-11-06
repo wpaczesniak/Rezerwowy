@@ -1,5 +1,6 @@
 package com.example.rezerwowy.mappers;
 
+import com.example.rezerwowy.dtos.FootballMatchDto;
 import com.example.rezerwowy.dtos.ReservationDto;
 import com.example.rezerwowy.exceptions.PaymentNotFoundException;
 import com.example.rezerwowy.exceptions.ReservationNotFoundException;
@@ -13,22 +14,18 @@ import com.example.rezerwowy.services.ReservationService;
 import com.example.rezerwowy.services.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ReservationMapper {
 	@Lazy
-	private final ReservationService reservationService;
-
-	@Lazy
 	private final FootballMatchService footballMatchService;
+	@Lazy
+	private final FootballMatchMapper footballMatchMapper;
 	@Lazy
 	private final SeatService seatService;
 	@Lazy
@@ -58,7 +55,8 @@ public class ReservationMapper {
 		FootballMatch footballMatch = null;
 		if (reservationDto.footballMatchId() != null) {
 			try {
-				footballMatch = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
+				FootballMatchDto footballMatchDto = footballMatchService.getFootballMatchById(reservationDto.footballMatchId());
+				footballMatchMapper.mapFootballMatchDtoToFootballMatch(footballMatchDto);
 			} catch (ReservationNotFoundException ignored) { }
 		}
 

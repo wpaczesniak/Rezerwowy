@@ -26,7 +26,7 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "reservation_id")
 	private Long id;
-	
+
 	@Column(name = "reservation_public_id")
 	@NotNull
 	@Builder.Default

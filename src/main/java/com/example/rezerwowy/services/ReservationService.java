@@ -4,10 +4,10 @@ import com.example.rezerwowy.exceptions.ReservationAlreadyExistsException;
 import com.example.rezerwowy.exceptions.ReservationNotFoundException;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.repositories.ReservationRepository;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +33,4 @@ public class ReservationService {
 			throw new ReservationNotFoundException(reservationId);
 		reservationRepository.deleteById(reservationId);
 	}
-
 }

@@ -8,9 +8,9 @@ import com.example.rezerwowy.services.PaymentService;
 import com.example.rezerwowy.services.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class PaymentMapper {
 

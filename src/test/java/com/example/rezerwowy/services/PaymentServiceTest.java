@@ -8,7 +8,6 @@ import com.example.rezerwowy.models.Payment;
 import com.example.rezerwowy.models.Reservation;
 import com.example.rezerwowy.models.Seat;
 import com.example.rezerwowy.repositories.PaymentRepository;
-import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
@@ -140,49 +141,34 @@ class PaymentServiceTest {
     }
 
     @Test
-    void should_containCorrectCurrency_when_generatePaymentReceipt() {
-        // given
-        Payment payment = PaymentFactory.createProperPaymentCase1();
-        int seatsCount = 1;
-        String currencyCode = "USD";
-        Money pricePerSeat = Money.of(9.35, currencyCode);
-        mockDataForReceipt(payment, seatsCount, pricePerSeat);
-
-        // when
-        String receipt = paymentService.generatePaymentReceipt(payment.getId());
-
-        // then
-        assertThat(receipt).contains(currencyCode);
-    }
-
-    @Test
     void should_containCorrectSum_when_generatePaymentReceipt() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 1;
-        Money pricePerSeat = Money.of(10.23, "EUR");
-        Money totalPrice = pricePerSeat.multiply(seatsCount);
+        BigDecimal pricePerSeat = BigDecimal.valueOf(10.23);
+        BigDecimal totalPrice = pricePerSeat.multiply(BigDecimal.valueOf(seatsCount));
         mockDataForReceipt(payment, seatsCount, pricePerSeat);
 
         // when
         String receipt = paymentService.generatePaymentReceipt(payment.getId());
 
         // then
-        assertThat(receipt).contains(totalPrice.getNumber().toString());
+        assertThat(receipt).contains(totalPrice.toString());
     }
 
     @Test
-    void should_containPricePerSeat3Times_when_generatePaymentReceiptForReservationFor3Seats() {
+    void should_containPricePerSeatAsManyTimesAsSeats_when_generatePaymentReceiptForReservationFor3Seats() {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 3;
-        Money pricePerSeat = Money.of(10.23, "EUR");
+        BigDecimal pricePerSeat = BigDecimal.valueOf(10.23);
         int expectedPriceOccurrences = 3;
         mockDataForReceipt(payment, seatsCount, pricePerSeat);
 
         // when
         String receipt = paymentService.generatePaymentReceipt(payment.getId());
         int actualPriceOccurrences = countSubstringOccurrences(receipt, pricePerSeat.toString());
+
         // then
         assertThat(actualPriceOccurrences).isGreaterThanOrEqualTo(expectedPriceOccurrences);
     }
@@ -192,14 +178,17 @@ class PaymentServiceTest {
         // given
         Payment payment = PaymentFactory.createProperPaymentCase1();
         int seatsCount = 2;
-        Money pricePerSeat = Money.of(11.99, "GBP");
+        BigDecimal pricePerSeat = BigDecimal.valueOf(11.99);
         double taxRateInPercent = PaymentService.TAX_IN_PERCENT;
-        Money expectedTaxAmount = pricePerSeat.multiply(seatsCount)
-                .multiply(taxRateInPercent).divide(100);
+        BigDecimal expectedTaxAmount = pricePerSeat.multiply(BigDecimal.valueOf(seatsCount))
+                .multiply(BigDecimal.valueOf(taxRateInPercent))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+                .setScale(2, RoundingMode.CEILING);
         mockDataForReceipt(payment, seatsCount, pricePerSeat);
 
         // when
         String receipt = paymentService.generatePaymentReceipt(payment.getId());
+
         // then
         assertThat(receipt).contains(expectedTaxAmount.toString());
     }
@@ -211,11 +200,12 @@ class PaymentServiceTest {
         LocalDate date = LocalDate.of(2015, 7, 3);
         payment.setDate(date);
         int seatsCount = 4;
-        Money pricePerSeat = Money.of(5.35, "PLN");
+        BigDecimal pricePerSeat = BigDecimal.valueOf(5.35);
         mockDataForReceipt(payment, seatsCount, pricePerSeat);
 
         // when
         String receipt = paymentService.generatePaymentReceipt(payment.getId());
+
         // then
         assertThat(receipt).contains(date.toString());
     }
@@ -227,7 +217,7 @@ class PaymentServiceTest {
         LocalDate date = LocalDate.of(2015, 7, 3);
         payment.setDate(date);
         int seatsCount = 4;
-        Money pricePerSeat = Money.of(14.37, "PLN");
+        BigDecimal pricePerSeat = BigDecimal.valueOf(14.37);
         mockDataForReceipt(payment, seatsCount, pricePerSeat);
 
         // when
@@ -244,7 +234,7 @@ class PaymentServiceTest {
         assertThat(areAllLinesOfEqualLengthOrEmpty).isTrue();
     }
 
-    private void mockDataForReceipt(Payment payment, int seatsCount, Money pricePerSeat) {
+    private void mockDataForReceipt(Payment payment, int seatsCount, BigDecimal pricePerSeat) {
         Reservation reservation = mock(Reservation.class);
         FootballMatch footballMatch = mock(FootballMatch.class);
         Set<Seat> seats = Stream.generate(Seat::new)
