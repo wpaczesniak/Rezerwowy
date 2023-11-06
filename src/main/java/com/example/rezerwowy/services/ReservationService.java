@@ -21,7 +21,7 @@ public class ReservationService {
 		return reservationRepository.save(reservation);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public Reservation getReservationById(Long reservationId) {
 		return reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new ReservationNotFoundException(reservationId));
@@ -33,5 +33,4 @@ public class ReservationService {
 			throw new ReservationNotFoundException(reservationId);
 		reservationRepository.deleteById(reservationId);
 	}
-
 }
